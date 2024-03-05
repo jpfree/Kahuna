@@ -40,36 +40,6 @@
       display: none;
     }
 
-    @media screen and (max-width: 600px) {
-      .topnav a:not(:first-child) {
-        display: none;
-      }
-
-      .topnav a.icon {
-        float: right;
-        display: block;
-      }
-    }
-
-    @media screen and (max-width: 600px) {
-      .topnav.responsive {
-        position: relative;
-      }
-
-      .topnav.responsive .icon {
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-
-      .topnav.responsive a {
-        float: none;
-        display: block;
-        text-align: left;
-      }
-    }
-
-    /*Hamburger Menu*/
     .container {
       display: inline-block;
       cursor: pointer;
@@ -85,22 +55,6 @@
       transition: 0.4s;
     }
 
-    /* Rotate first bar */
-    .change .bar1 {
-      transform: translate(0, 5px) rotate(-45deg);
-    }
-
-    /* Fade out the second bar */
-    .change .bar2 {
-      opacity: 0;
-    }
-
-    /* Rotate last bar */
-    .change .bar3 {
-      transform: translate(0, -5px) rotate(45deg);
-    }
-
-    /* Form Box */
     .formbox {
       max-width: 50%;
       margin: 20px;
@@ -110,24 +64,42 @@
       background-color: #f2f2f2;
     }
 
-    @media screen and (max-width: 600px) {
-      .formbox {
-        margin: 20px 2px;
-        max-width: 100%;
-      }
+    input[type='submit'] {
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+    }
+
+    input[type='file'] {
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f2f2f2;
     }
 
     /* Logo */
     #logo {
-      height: 10mm;
+      display: block;
       float: left;
-      margin-bottom: 0;
+      height: 40px;
     }
 
     #title {
       display: block;
       float: left;
-      margin: 0;
+      margin-top: auto;
+      margin-bottom: auto;
       padding: 0;
       font-size: 30px;
       color: #61206e;
@@ -135,80 +107,153 @@
 
     #logocontainer {
       display: flex;
-      width: 100%;
-      height: fit-content;
       margin: 0;
       padding: 0;
       background-color: #f2f2f2;
       padding: 5px;
     }
+
+    #FW {
+      margin-top: auto;
+      margin-bottom: 5px;
+      margin-left: auto;
+      margin-right: 5px;
+      padding: 0;
+      font-size: 10px;
+    }
+
+    @media screen and (max-device-width: 600px) {
+      .topnav a:not(:first-child) {
+        display: none;
+      }
+
+      .topnav a.icon {
+        float: right;
+        display: block;
+        padding: none;
+      }
+
+      .topnav.responsive {
+        position: relative;
+      }
+
+      .topnav.responsive .icon {
+        position: absolute;
+        padding: none;
+        right: 0;
+        top: 0;
+      }
+
+      .topnav.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+      }
+
+      .topnav a {
+        font-size: 200%;
+      }
+
+      body {
+        font-size: 250%;
+      }
+
+      input {
+        font-size: 100%;
+      }
+
+      .bar1,
+      .bar2,
+      .bar3 {
+        width: 60px;
+        height: 10px;
+        background-color: white;
+        margin: 4px 0;
+      }
+
+      .container {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      .formbox {
+        margin: 20px 2px;
+        max-width: 100%;
+      }
+
+      input[type='radio'] {
+        height: 35px;
+        width: 35px;
+
+      }
+
+      #logo {
+        height: 100px;
+      }
+
+      #title {
+        font-size: 80px;
+      }
+
+      #FW {
+        font-size: 25px;
+      }
+
+    }
   </style>
+  <script>
+    function changeTopnav() {
+      var x = document.getElementById("BRtopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
+  </script>
   <title>BR Kahuna</title>
+
 </head>
+
 
 <body>
   <div id="logocontainer">
-    <svg id="logo" viewBox="0 0 250 100" version="1.1" id="svg32909" inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
-      sodipodi:docname="LogoColourV2.svg" inkscape:export-filename="LogoColourNoBackgroundV2.png"
-      inkscape:export-xdpi="600" inkscape:export-ydpi="600" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-      xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
-      xmlns:svg="http://www.w3.org/2000/svg">
-      <sodipodi:namedview id="namedview32911" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0"
-        inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0"
-        inkscape:deskcolor="#d1d1d1" inkscape:document-units="mm" showgrid="false" inkscape:zoom="0.5946522"
-        inkscape:cx="483.47589" inkscape:cy="512.90486" inkscape:window-width="1680" inkscape:window-height="987"
-        inkscape:window-x="1912" inkscape:window-y="472" inkscape:window-maximized="1"
-        inkscape:current-layer="layer1" />
-      <defs id="defs32906" />
-      <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" transform="translate(3.6199529,20.395338)">
-        <g id="g3205" transform="translate(-0.62316481,-4.3941031)">
-          <g id="g1240" transform="matrix(1.8479962,0,0,1.8479962,-9.707708,-3.7351352)">
-            <path
-              style="fill:none;fill-opacity:1;stroke:#61206e;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-              d="M 12.448179,35.431994 30.470046,17.816324" id="path19882" />
-            <g id="g29741"
-              style="fill:none;fill-opacity:1;stroke:#61206e;stroke-width:7.55906;stroke-dasharray:none;stroke-opacity:1"
-              transform="matrix(0.26458333,0,0,0.26458333,3.6431699,-4.4744644)">
+    <svg id="logo" version="1.1" viewBox="0 0 210 100" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(3.62 20.395)">
+        <g transform="translate(-.62316 -4.3941)">
+          <g transform="matrix(1.848 0 0 1.848 -9.7077 -3.7351)" fill="none" stroke="#61206e">
+            <path d="m12.448 35.432 18.022-17.616" stroke-width="2" />
+            <g transform="matrix(.26458 0 0 .26458 3.6432 -4.4745)" stroke-width="7.5591">
               <path
-                style="fill:none;fill-opacity:1;stroke:#61206e;stroke-width:7.55906;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-                d="M 33.278774,150.82756 V 37.441725 h 37.795282 c 0,0 20.650751,-1.400322 32.600624,15.97814 11.94987,17.37846 -2.28176,30.828785 -2.28176,30.828785 l -68.114146,66.57891"
-                id="path21239" sodipodi:nodetypes="cccscc" />
-              <g id="g24573"
-                style="fill:none;fill-opacity:1;stroke:#61206e;stroke-width:7.55906;stroke-dasharray:none;stroke-opacity:1">
-                <path
-                  style="fill:none;fill-opacity:1;stroke:#61206e;stroke-width:7.55906;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-                  d="m 71.074056,37.441725 43.626044,-0.08317 c 0,0 20.65075,-1.400321 32.60062,15.97814 11.94987,17.378461 -2.28176,30.828785 -2.28176,30.828785 l -28.34746,27.14174"
-                  id="path21239-9" sodipodi:nodetypes="cczcc" />
-                <path
-                  style="fill:none;fill-opacity:1;stroke:#61206e;stroke-width:7.55906;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-                  d="M 33.278774,150.82756 155.5635,150.74439 125.34163,103.47303" id="path23738"
-                  sodipodi:nodetypes="ccc" />
-              </g>
+                d="m33.279 150.83v-113.39h37.795s20.651-1.4003 32.601 15.978c11.95 17.378-2.2818 30.829-2.2818 30.829l-68.114 66.579" />
+              <path
+                d="m71.074 37.442 43.626-0.08317s20.651-1.4003 32.601 15.978-2.2818 30.829-2.2818 30.829l-28.347 27.142" />
+              <path d="m33.279 150.83 122.28-0.08317-30.222-47.271" />
             </g>
-            <path
-              style="fill:none;fill-opacity:1;stroke:#61206e;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3.1;stroke-dasharray:none;stroke-opacity:1"
-              d="m 11.448179,35.428067 10.870461,0.0039 c 0,0 10.549494,0.227312 12.21375,-6.589313 1.664256,-6.816624 -5.727061,-9.384571 -5.727061,-9.384571"
-              id="path21675" sodipodi:nodetypes="cczc" />
+            <path d="m11.448 35.428 10.87 0.0039s10.549 0.22731 12.214-6.5893c1.6643-6.8166-5.7271-9.3846-5.7271-9.3846"
+              stroke-miterlimit="3.1" stroke-width="2" />
           </g>
-          <text xml:space="preserve"
-            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:136.063px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;opacity:1;fill:#61206e;fill-opacity:1;stroke:none;stroke-width:0.999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-            x="125.12414" y="57.077274" id="text430" transform="matrix(0.26458333,0,0,0.26458333,48.792936,14.502967)">
-            <tspan sodipodi:role="line" id="tspan428" x="125.12414" y="57.077274"
-              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:136.063px;font-family:'Space Mono';-inkscape-font-specification:'Space Mono';fill:#61206e;fill-opacity:1">
-              Beyond </tspan>
+          <text transform="matrix(.26458 0 0 .26458 48.793 14.503)" x="125.12414" y="57.077274" dominant-baseline="auto"
+            fill="#61206e" font-family="'Times New Roman'" font-size="136.06px" stop-color="#000000"
+            style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;line-height:1.25;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+            xml:space="preserve">
+            <tspan x="125.12414" y="57.077274" fill="#61206e" font-family="'Space Mono'" font-size="136.06px">Beyond
+            </tspan>
           </text>
-          <text xml:space="preserve"
-            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:136.063px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-            x="761.78986" y="48.768002" id="text955" transform="matrix(0.26458333,0,0,0.26458333,-120.6662,50.185669)">
-            <tspan sodipodi:role="line" id="tspan953" x="761.78986" y="48.768002"
-              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:136.063px;font-family:'Space Mono';-inkscape-font-specification:'Space Mono'">
-              Robotix</tspan>
+          <text transform="matrix(.26458 0 0 .26458 -120.67 50.186)" x="761.78986" y="48.768002"
+            dominant-baseline="auto" fill="#000000" font-family="'Times New Roman'" font-size="136.06px"
+            stop-color="#000000"
+            style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;line-height:1.25;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"
+            xml:space="preserve">
+            <tspan x="761.78986" y="48.768002" font-family="'Space Mono'" font-size="136.06px">Robotix</tspan>
           </text>
         </g>
       </g>
     </svg>
     <h1 id="title">Kahuna</h1>
+    <p id="FW">Version:1.2</p>
   </div>
+
 
 
   <div class="topnav" id="BRtopnav">
@@ -226,24 +271,10 @@
     </a>
   </div>
 
-  <script>
-    function changeTopnav() {
-      var x = document.getElementById("BRtopnav");
-      if (x.className === "topnav") {
-        x.className += " responsive";
-      } else {
-        x.className = "topnav";
-      }
-    }
-  </script>
-  <!-- // function hamburgerMenu(x) {
-    //   x.classList.toggle("change");
-    // }
-  </script> -->
 
   <form action="http://192.168.4.1/setparameters" method="post">
     <div class="formbox">
-      WiFi Mode:&nbsp;<input type="radio" name="mode" value="0" checked="">AccessPoint
+      WiFi Mode:&nbsp;<input type="radio" name="mode" value="0" checked="">Access Point
       <input type="radio" name="mode" value="1">Station<br>
       Baudrate:&nbsp;<input type="text" name="baud" value="57600"><br>
       Host Port:&nbsp;<input type="text" name="hport" value="14550"><br>
@@ -264,6 +295,9 @@
       Station Subnet:&nbsp;<input type="text" name="subnetsta" value="(IP unset)"><br>
     </div>
   </form>
+
+  <form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' name='update'><br><input
+      type='submit' value='Update'></form>
 
 </body>
 
