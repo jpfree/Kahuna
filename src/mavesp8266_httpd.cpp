@@ -88,6 +88,7 @@ ESP8266WebServer webServer(80);
 MavESP8266Update *updateCB = NULL;
 bool started = false;
 
+String message;
 //---------------------------------------------------------------------------------
 void setNoCacheHeaders()
 {
@@ -111,18 +112,32 @@ void respondOK()
 //---------------------------------------------------------------------------------
 void handle_update()
 {
-    String message = FPSTR(kHEADER1);
-    message += vstr;
-    message += "</p></div><div class=topnav id=BRtopnav><a href=/update class=active>Firmware Update</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/>Setup</a><a href=/reboot>Reboot</a>";
-    message += FPSTR(kHEADER2);
-    message += "<div class='formbox'>";
-    message += "<p>Upload new firmware</p>";
-    message += FPSTR(kUPLOADFORM);
-    message += "</div>";
-    message += "</body>";
+    // String message = FPSTR(kHEADER1);
     webServer.sendHeader("Connection", "close");
     webServer.sendHeader(FPSTR(kACCESSCTL), "*");
-    webServer.send(200, FPSTR(kTEXTHTML), message);
+    webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    webServer.send_P(200, kTEXTHTML, kHEADER1);
+
+    message = vstr;
+    message += "</p></div><div class=topnav id=BRtopnav><a href=/update class=active>Firmware Update</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/>Setup</a><a href=/reboot>Reboot</a>";
+    webServer.sendContent(message);
+
+    webServer.sendContent_P(kHEADER2);
+
+    // message += FPSTR(kHEADER2);
+    message = "<div class='formbox'>";
+    message += "<p>Upload new firmware</p>";
+
+    webServer.sendContent(message);
+
+    // message += FPSTR(kUPLOADFORM);
+    webServer.sendContent_P(kUPLOADFORM);
+
+    message = "</div>";
+    message += "</body>";
+    webServer.sendContent(message);
+
+    // webServer.send(200, FPSTR(kTEXTHTML), message);
 }
 
 //---------------------------------------------------------------------------------
@@ -211,11 +226,24 @@ void handle_upload_status()
 //---------------------------------------------------------------------------------
 void handle_getParameters()
 {
-    String message = FPSTR(kHEADER1);
-    message += vstr;
+
+    setNoCacheHeaders();
+    // Chunk 1
+    webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    // webServer.send(200, FPSTR(kTEXTHTML), FPSTR(kHEADER1));
+    webServer.send_P(200, kTEXTHTML, kHEADER1);
+
+    // Chunk 2
+    String message = vstr;
     message += "</p></div><div class=topnav id=BRtopnav><a href=/getparameters class=active>Parameters</a><a href=/ >Setup</a><a href=/getstatus>Status</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>";
-    message += FPSTR(kHEADER2);
-    message += "<div class='formbox'>";
+    // message += FPSTR(kHEADER2);
+    //  webServer.send(200, FPSTR(kTEXTHTML), message);
+    webServer.sendContent(message);
+    // Chunk 3
+    webServer.sendContent_P(kHEADER2);
+
+    // Chunk 4
+    message = "<div class='formbox'>";
     // message += "<table><tr><td width=\"240\">Name</td><td>Value</td></tr>";
     // for (int i = 0; i < MavESP8266Parameters::ID_COUNT; i++)
     // {
@@ -341,7 +369,10 @@ void handle_getParameters()
         }
     }
     message += "</table></div></body>";
-    webServer.send(200, FPSTR(kTEXTHTML), message);
+    // webServer.send(200, FPSTR(kTEXTHTML), message);
+    // webServer.send(200, FPSTR(kTEXTHTML), "");
+    webServer.sendContent(message);
+    webServer.sendContent("");
 }
 
 //---------------------------------------------------------------------------------
@@ -368,13 +399,25 @@ void handle_getParameters()
 //---------------------------------------------------------------------------------
 static void handle_setup()
 {
-    String message = FPSTR(kHEADER1);
-    message += vstr;
+    // String message = FPSTR(kHEADER1);
+
+    setNoCacheHeaders();
+    // Chunk 1
+    webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    // webServer.send(200, FPSTR(kTEXTHTML), FPSTR(kHEADER1));
+    webServer.send_P(200, kTEXTHTML, kHEADER1);
+
+    // Chunk 2
+    String message = vstr;
     message += "</p></div><div class=topnav id=BRtopnav><a href=/ class=active>Setup</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>";
     message += FPSTR(kHEADER2);
+    // webServer.send(200, FPSTR(kTEXTHTML), message);
+    webServer.sendContent(message);
+    // Chunk 3
+    webServer.sendContent_P(kHEADER2);
 
-    message += "<form action='/setparameters' method='post'>\n";
-
+    // Chunk 4
+    message = "<form action='/setparameters' method='post'>\n";
     // General Settings
     message += "<div class='formbox'>";
 
@@ -464,9 +507,12 @@ static void handle_setup()
     message += "</div>";
 
     message += "<input type='submit' value='Save'>";
-    message += "</form>";
-    setNoCacheHeaders();
-    webServer.send(200, FPSTR(kTEXTHTML), message);
+    message += "</form></body>";
+
+    // webServer.send(200, FPSTR(kTEXTHTML), message);
+    webServer.sendContent(message);
+    // webServer.send(200, FPSTR(kTEXTHTML), "");
+    webServer.sendContent("");
 }
 
 //---------------------------------------------------------------------------------
@@ -480,12 +526,25 @@ static void handle_getStatus()
     }
     linkStatus *gcsStatus = getWorld()->getGCS()->getStatus();
     linkStatus *vehicleStatus = getWorld()->getVehicle()->getStatus();
-    String message = FPSTR(kHEADER1);
-    message += vstr;
-    message += "</p></div><div class=topnav id=BRtopnav><a href=/getstatus class=active>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>";
-    message += FPSTR(kHEADER2);
 
-    message += "<div class='formbox'>";
+    setNoCacheHeaders();
+    // Chunk 1
+    webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    // webServer.send(200, FPSTR(kTEXTHTML), FPSTR(kHEADER1));
+    webServer.send_P(200, kTEXTHTML, kHEADER1);
+
+    // Chunk 2
+    //  String message = FPSTR(kHEADER1);
+    String message = vstr;
+    message += "</p></div><div class=topnav id=BRtopnav><a href=/getstatus class=active>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>";
+    // message += FPSTR(kHEADER2);
+    webServer.sendContent(message);
+
+    // Chunk 3
+    webServer.sendContent_P(kHEADER2);
+
+    // Chunk 4
+    message = "<div class='formbox'>";
     message += "<p>Comm Status</p><table><tr><td width=\"240\">Packets Received from GCS</td><td>";
     message += gcsStatus->packets_received;
     message += "</td></tr><tr><td>Packets Sent to GCS</td><td>";
@@ -517,8 +576,11 @@ static void handle_getStatus()
     message += "</table>";
     message += "</div>";
     message += "</body>";
-    setNoCacheHeaders();
-    webServer.send(200, FPSTR(kTEXTHTML), message);
+    // setNoCacheHeaders();
+    // webServer.send(200, FPSTR(kTEXTHTML), message);
+    // webServer.send(200, FPSTR(kTEXTHTML), "");
+    webServer.sendContent(message);
+    webServer.sendContent("");
 }
 
 //---------------------------------------------------------------------------------
@@ -714,15 +776,25 @@ void handle_setParameters()
 //---------------------------------------------------------------------------------
 static void handle_reboot()
 {
-    String message = FPSTR(kHEADER1);
-    message += vstr;
+    // String message = FPSTR(kHEADER1);
+    setNoCacheHeaders();
+    webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    webServer.send_P(200, kTEXTHTML, kHEADER1);
+
+    String message = vstr;
     message += "</p></div><div class=topnav id=BRtopnav><a href=/reboot class=active>Reboot</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a>";
-    message += FPSTR(kHEADER2);
-    message += "<div class='formbox'>";
+    webServer.sendContent(message);
+
+    // message += FPSTR(kHEADER2);
+    webServer.sendContent_P(kHEADER2);
+
+    message = "<div class='formbox'>";
     message += "rebooting ...</body>\n";
     message += "</div>";
-    setNoCacheHeaders();
-    webServer.send(200, FPSTR(kTEXTHTML), message);
+    webServer.sendContent(message);
+    webServer.sendContent("");
+    // setNoCacheHeaders();
+    // webServer.send(200, FPSTR(kTEXTHTML), message);
     delay(500);
     ESP.restart();
 }
@@ -757,6 +829,7 @@ void MavESP8266Httpd::begin(MavESP8266Update *updateCB_)
 {
     updateCB = updateCB_;
     snprintf(vstr, sizeof(vstr), "%u.%u.%u", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
+    message.reserve(1024);
     // webServer.on("/", handle_root);
     webServer.on("/", handle_setup);
     webServer.on("/setparameters", handle_setParameters);
