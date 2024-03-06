@@ -157,6 +157,7 @@ void setup_station()
     //-- Connect to an existing network
     ledManager.setLED(ledManager.wifi, ledManager.doubleBlink); // Double blink while searching for station
     WiFi.mode(WIFI_STA);
+    WiFi.setSleepMode(WIFI_NONE_SLEEP); // Aparrently it can go to sleep in station mode
     WiFi.config(Parameters.getWifiStaIP(), Parameters.getWifiStaGateway(), Parameters.getWifiStaSubnet(), 0U, 0U);
     WiFi.begin(Parameters.getWifiStaSsid(), Parameters.getWifiStaPassword());
 }
