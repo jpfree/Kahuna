@@ -104,8 +104,8 @@ void setNoCacheHeaders()
     webServer.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     webServer.sendHeader("Pragma", "no-cache");
     // webServer.sendHeader("Expires", "0");
-    webServer.sendHeader("expires", "Fri, 01 Jan 1990 00:00:00 GMT");
-    // webServer.sendHeader("Expires", "-1");
+    // webServer.sendHeader("expires", "Fri, 01 Jan 1990 00:00:00 GMT");
+    webServer.sendHeader("Expires", "-1");
 }
 
 //---------------------------------------------------------------------------------
@@ -123,7 +123,6 @@ void respondOK()
 //---------------------------------------------------------------------------------
 void handle_update()
 {
-    // String message = FPSTR(kHEADER1);
     webServer.sendHeader("Connection", "close");
     webServer.sendHeader(FPSTR(kACCESSCTL), "*");
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
@@ -133,17 +132,10 @@ void handle_update()
     webServer.sendContent_P(kHEADER1_C4);
     webServer.sendContent_P(kHEADER1_C5);
 
-    // message = vstr;
-    // message += "</p></div><div class=topnav id=BRtopnav><a href=/update class=active>Firmware Update</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/>Setup</a><a href=/reboot>Reboot</a>";
-
-    snprintf(buffer, sizeof(buffer), "%s</p></div><div class=topnav id=BRtopnav><a href=/update class=active>Firmware Update</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/>Setup</a><a href=/reboot>Reboot</a>", vstr);
+    snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/update class=active>Firmware Update</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/>Setup</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
 
     webServer.sendContent_P(kHEADER2);
-
-    // message += FPSTR(kHEADER2);
-    // message = "<div class='formbox'>";
-    // message += "<p>Upload new firmware</p>";
 
     webServer.sendContent("<div class='formbox'><p>Upload new firmware</p>");
 
@@ -240,7 +232,6 @@ void handle_getParameters() // This can be improved a lot
     setNoCacheHeaders();
     // Chunk 1
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
-    // webServer.send(200, FPSTR(kTEXTHTML), FPSTR(kHEADER1));
     webServer.send_P(200, kTEXTHTML, kHEADER1_C1);
     webServer.sendContent_P(kHEADER1_C2);
     webServer.sendContent_P(kHEADER1_C3);
@@ -248,98 +239,34 @@ void handle_getParameters() // This can be improved a lot
     webServer.sendContent_P(kHEADER1_C5);
 
     // Chunk 2
-    // message = vstr;
-    // message += "</p></div><div class=topnav id=BRtopnav><a href=/getparameters class=active>Parameters</a><a href=/ >Setup</a><a href=/getstatus>Status</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>";
-    // message += FPSTR(kHEADER2);
-    //  webServer.send(200, FPSTR(kTEXTHTML), message);
-
-    snprintf(buffer, sizeof(buffer), "%s</p></div><div class=topnav id=BRtopnav><a href=/getparameters class=active>Parameters</a><a href=/ >Setup</a><a href=/getstatus>Status</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", vstr);
+    snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/getparameters class=active>Parameters</a><a href=/ >Setup</a><a href=/getstatus>Status</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
+
     // Chunk 3
     webServer.sendContent_P(kHEADER2);
 
     // Chunk 4
-
-    // message += "<table><tr><td width=\"240\">Name</td><td>Value</td></tr>";
-    // for (int i = 0; i < MavESP8266Parameters::ID_COUNT; i++)
-    // {
-    //     message += "<tr><td>";
-    //     message += getWorld()->getParameters()->getAt(i)->id;
-    //     message += "</td>";
-    //     unsigned long val = 0;
-    //     if (getWorld()->getParameters()->getAt(i)->type == MAV_PARAM_TYPE_UINT32)
-    //         val = (unsigned long)*((uint32_t *)getWorld()->getParameters()->getAt(i)->value);
-    //     else if (getWorld()->getParameters()->getAt(i)->type == MAV_PARAM_TYPE_UINT16)
-    //         val = (unsigned long)*((uint16_t *)getWorld()->getParameters()->getAt(i)->value);
-    //     else
-    //         val = (unsigned long)*((int8_t *)getWorld()->getParameters()->getAt(i)->value);
-    //     message += "<td>";
-    //     message += val;
-    //     message += "</td></tr>";
-    // }
-
-    // message = "<div class='formbox'>";
-    // message += "<table><tr><td width=\"240\">Name</td><td>Value</td></tr>";
-
     webServer.sendContent("<div class='formbox'><table><tr><td width=\"240\">Name</td><td>Value</td></tr>");
 
     for (int i = 0; i < MavESP8266Parameters::ID_COUNT; i++)
     {
         if (i == getWorld()->getParameters()->ID_FWVER)
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
-            // message += "<td>";
-            // message += MAVESP8266_VERSION_MAJOR;
-            // message += ".";
-            // message += MAVESP8266_VERSION_MINOR;
-            // message += ".";
-            // message += MAVESP8266_VERSION_BUILD;
-            // message += "</td></tr>";
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%u.%u.%u</td></tr>", getWorld()->getParameters()->getAt(i)->id, MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
             webServer.sendContent(buffer);
         }
         else if (i == getWorld()->getParameters()->ID_MODE)
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
-            // message += "<td>";
-            // if (getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP)
-            // {
-            //     message += "AP";
-            // }
-            // else
-            // {
-            //     message += "STA";
-            // }
-            // message += "</td></tr>";
-
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%s</td></tr>", getWorld()->getParameters()->getAt(i)->id, getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP ? "AP" : "STA");
             webServer.sendContent(buffer);
         }
         else if (i == getWorld()->getParameters()->ID_IPADDRESS)
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
-            // message += "<td>";
-            // message += getWorld()->getParameters()->getLocalIPAddressInString();
-            // message += "</td></tr>";
-
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%s</td></tr>", getWorld()->getParameters()->getAt(i)->id, getWorld()->getParameters()->getLocalIPAddressInString());
             webServer.sendContent(buffer);
         }
         else if (i == getWorld()->getParameters()->ID_SSID1)
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
-            // message += "<td>";
-            // message += getWorld()->getParameters()->getWifiSsid();
-            // message += "</td></tr>";
-
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%s</td></tr>", getWorld()->getParameters()->getAt(i)->id, getWorld()->getParameters()->getWifiSsid());
             webServer.sendContent(buffer);
         }
@@ -348,13 +275,6 @@ void handle_getParameters() // This can be improved a lot
         }
         else if (i == getWorld()->getParameters()->ID_PASS1)
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
-            // message += "<td>";
-            // message += getWorld()->getParameters()->getWifiPassword();
-            // message += "</td></tr>";
-
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%s</td></tr>", getWorld()->getParameters()->getAt(i)->id, getWorld()->getParameters()->getWifiPassword());
             webServer.sendContent(buffer);
         }
@@ -363,13 +283,6 @@ void handle_getParameters() // This can be improved a lot
         }
         else if (i == getWorld()->getParameters()->ID_SSIDSTA1)
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
-            // message += "<td>";
-            // message += getWorld()->getParameters()->getWifiStaSsid();
-            // message += "</td></tr>";
-
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%s</td></tr>", getWorld()->getParameters()->getAt(i)->id, getWorld()->getParameters()->getWifiStaSsid());
             webServer.sendContent(buffer);
         }
@@ -378,13 +291,6 @@ void handle_getParameters() // This can be improved a lot
         }
         else if (i == getWorld()->getParameters()->ID_PASSSTA1)
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
-            // message += "<td>";
-            // message += getWorld()->getParameters()->getWifiStaPassword();
-            // message += "</td></tr>";
-
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%s</td></tr>", getWorld()->getParameters()->getAt(i)->id, getWorld()->getParameters()->getWifiStaPassword());
             webServer.sendContent(buffer);
         }
@@ -393,9 +299,6 @@ void handle_getParameters() // This can be improved a lot
         }
         else // integer values
         {
-            // message += "<tr><td>";
-            // message += getWorld()->getParameters()->getAt(i)->id;
-            // message += "</td>";
             unsigned long val = 0;
             if (getWorld()->getParameters()->getAt(i)->type == MAV_PARAM_TYPE_UINT32)
                 val = (unsigned long)*((uint32_t *)getWorld()->getParameters()->getAt(i)->value);
@@ -404,49 +307,21 @@ void handle_getParameters() // This can be improved a lot
             else
                 val = (unsigned long)*((int8_t *)getWorld()->getParameters()->getAt(i)->value);
 
-            // message += "<td>";
-            // message += val;
-            // message += "</td></tr>";
-
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%lu</td></tr>", getWorld()->getParameters()->getAt(i)->id, val);
             webServer.sendContent(buffer);
         }
     }
-    // message += "</table></div></body>";
     webServer.sendContent("</table></div></body></html>");
     webServer.sendContent("");
 }
 
 //---------------------------------------------------------------------------------
-// static void handle_root()
-// {
-//     String message = FPSTR(kHEADER);
-//     message += "<p id=\"title\">Version: ";
-//     char vstr[30];
-//     snprintf(vstr, sizeof(vstr), "%u.%u.%u", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
-//     message += vstr;
-//     message += "</p>\n";
-//     message += "<p>\n";
-//     message += "<ul>\n";
-//     message += "<li><a href='/getstatus'>Get Status</a>\n";
-//     message += "<li><a href='/setup'>Setup</a>\n";
-//     message += "<li><a href='/getparameters'>Get Parameters</a>\n";
-//     message += "<li><a href='/update'>Update Firmware</a>\n";
-//     message += "<li><a href='/reboot'>Reboot</a>\n";
-//     message += "</ul></body>";
-//     setNoCacheHeaders();
-//     webServer.send(200, FPSTR(kTEXTHTML), message);
-// }
-
-//---------------------------------------------------------------------------------
 static void handle_setup()
 {
-    // String message = FPSTR(kHEADER1);
 
     setNoCacheHeaders();
     // Chunk 1
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
-    // webServer.send(200, FPSTR(kTEXTHTML), FPSTR(kHEADER1));
     webServer.send_P(200, kTEXTHTML, kHEADER1_C1);
     webServer.sendContent_P(kHEADER1_C2);
     webServer.sendContent_P(kHEADER1_C3);
@@ -454,112 +329,14 @@ static void handle_setup()
     webServer.sendContent_P(kHEADER1_C5);
 
     // Chunk 2
-    // message = vstr;
-    // message += "</p></div><div class=topnav id=BRtopnav><a href=/ class=active>Setup</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>";
-
-    // snprintf(buffer, sizeof(buffer), vstr, "</p></div><div class=topnav id=BRtopnav><a href=/ class=active>Setup</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>");
-    snprintf(buffer, sizeof(buffer), "%s</p></div><div class=topnav id=BRtopnav><a href=/ class=active>Setup</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", vstr);
-
+    snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/ class=active>Setup</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
     // Chunk 3
     webServer.sendContent_P(kHEADER2);
 
     // Chunk 4
-    // message = "<form action='/setparameters' method='post'>\n";
-    // // General Settings
-    // message += "<div class='formbox'>";
-
-    // message += "WiFi Mode:&nbsp;";
-    // message += "<input type='radio' name='mode' value='0'";
-
-    // if (getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP)
-    // {
-    //     message += " checked";
-    // }
-    // message += ">AccessPoint\n";
-    // message += "<input type='radio' name='mode' value='1'";
-    // if (getWorld()->getParameters()->getWifiMode() == WIFI_MODE_STA)
-    // {
-    //     message += " checked";
-    // }
-    // message += ">Station<br>\n";
-
     snprintf(buffer, sizeof(buffer), "<form action='/setparameters' method='post'><div class='formbox'>WiFi Mode:&nbsp;<input type='radio' name='mode' value='0'%s>AccessPoint<input type='radio' name='mode' value='1'%s>Station<br>", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP ? " checked" : "", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_STA ? " checked" : "");
     webServer.sendContent(buffer);
-
-    // message += "Host Port:&nbsp;";
-    // message += "<input type='text' name='hport' value='";
-    // message += getWorld()->getParameters()->getWifiUdpHport();
-    // message += "'><br>";
-
-    // message += "Client Port:&nbsp;";
-    // message += "<input type='text' name='cport' value='";
-    // message += getWorld()->getParameters()->getWifiUdpCport();
-    // message += "'><br>";
-
-    // message += "Baudrate:&nbsp;";
-    // message += "<input type='text' name='baud' value='";
-    // message += getWorld()->getParameters()->getUartBaudRate();
-    // message += "'><br>";
-
-    // message += "</div>";
-
-    // // AP Settings
-    // message += "<div class='formbox'>";
-
-    // message += "AP SSID:&nbsp;";
-    // message += "<input type='text' name='ssid' value='";
-    // message += getWorld()->getParameters()->getWifiSsid();
-    // message += "'><br>";
-
-    // message += "AP Password (min len 8):&nbsp;";
-    // message += "<input type='text' name='pwd' value='";
-    // message += getWorld()->getParameters()->getWifiPassword();
-    // message += "'><br>";
-
-    // message += "WiFi Channel:&nbsp;";
-    // message += "<input type='text' name='channel' value='";
-    // message += getWorld()->getParameters()->getWifiChannel();
-    // message += "'><br>";
-
-    // message += "</div>";
-
-    // // STA Settings
-    // message += "<div class='formbox'>";
-
-    // message += "Station SSID:&nbsp;";
-    // message += "<input type='text' name='ssidsta' value='";
-    // message += getWorld()->getParameters()->getWifiStaSsid();
-    // message += "'><br>";
-
-    // message += "Station Password:&nbsp;";
-    // message += "<input type='text' name='pwdsta' value='";
-    // message += getWorld()->getParameters()->getWifiStaPassword();
-    // message += "'><br>";
-
-    // IPAddress IP;
-    // message += "Station IP:&nbsp;";
-    // message += "<input type='text' name='ipsta' value='";
-    // IP = getWorld()->getParameters()->getWifiStaIP();
-    // message += IP.toString();
-    // message += "'><br>";
-
-    // message += "Station Gateway:&nbsp;";
-    // message += "<input type='text' name='gatewaysta' value='";
-    // IP = getWorld()->getParameters()->getWifiStaGateway();
-    // message += IP.toString();
-    // message += "'><br>";
-
-    // message += "Station Subnet:&nbsp;";
-    // message += "<input type='text' name='subnetsta' value='";
-    // IP = getWorld()->getParameters()->getWifiStaSubnet();
-    // message += IP.toString();
-    // message += "'><br>";
-
-    // message += "</div>";
-
-    // message += "<input type='submit' value='Save'>";
-    // message += "</form></body>";
 
     IPAddress StaIP = getWorld()->getParameters()->getWifiStaIP();
     IPAddress StaGateway = getWorld()->getParameters()->getWifiStaGateway();
@@ -586,7 +363,6 @@ static void handle_getStatus()
     setNoCacheHeaders();
     // Chunk 1
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
-    // webServer.send(200, FPSTR(kTEXTHTML), FPSTR(kHEADER1));
     webServer.send_P(200, kTEXTHTML, kHEADER1_C1);
     webServer.sendContent_P(kHEADER1_C2);
     webServer.sendContent_P(kHEADER1_C3);
@@ -594,58 +370,13 @@ static void handle_getStatus()
     webServer.sendContent_P(kHEADER1_C5);
 
     // Chunk 2
-    // message = vstr;
-    // message += "</p></div><div class=topnav id=BRtopnav><a href=/getstatus class=active>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>";
-
-    snprintf(buffer, sizeof(buffer), "%s</p></div><div class=topnav id=BRtopnav><a href=/getstatus class=active>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", vstr);
+    snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/getstatus class=active>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
 
     // Chunk 3
     webServer.sendContent_P(kHEADER2);
 
     // Chunk 4
-    // message = "<div class='formbox'>";
-    // message += "<p>Comm Status</p><table><tr><td width=\"240\">Packets Received from GCS</td><td>";
-    // message += gcsStatus->packets_received;
-    // message += "</td></tr><tr><td>Packets Sent to GCS</td><td>";
-    // message += gcsStatus->packets_sent;
-    // message += "</td></tr><tr><td>GCS Packets Lost</td><td>";
-    // message += gcsStatus->packets_lost;
-    // message += "</td></tr><tr><td>Packets Received from Vehicle</td><td>";
-    // message += vehicleStatus->packets_received;
-    // message += "</td></tr><tr><td>Packets Sent to Vehicle</td><td>";
-    // message += vehicleStatus->packets_sent;
-    // message += "</td></tr><tr><td>Vehicle Packets Lost</td><td>";
-    // message += vehicleStatus->packets_lost;
-    // message += "</td></tr><tr><td>Radio Messages</td><td>";
-    // message += gcsStatus->radio_status_sent;
-    // message += "</td></tr></table>";
-    // message += "<p>System Status</p><table>\n";
-    // message += "<tr><td width=\"240\">Flash Size</td><td>";
-    // message += ESP.getFlashChipRealSize();
-    // message += "</td></tr>\n";
-    // message += "<tr><td width=\"240\">Flash Available</td><td>";
-    // message += flash;
-    // message += "</td></tr>\n";
-    // message += "<tr><td>RAM Left</td><td>";
-    // message += String(ESP.getFreeHeap());
-    // message += "</td></tr>\n";
-    // message += "<tr><td>Parameters CRC</td><td>";
-    // message += paramCRC;
-    // message += "</td></tr>\n";
-    // message += "</table>";
-    // message += "</div>";
-    // message += "</body>";
-
-    // snprintf(buffer, sizeof(buffer), "<div class='formbox'><p>Comm Status</p><table><tr><td width=\"240\">Packets Received from GCS</td><td>",
-    //          gcsStatus->packets_received, "</td></tr><tr><td>Packets Sent to GCS</td><td>", gcsStatus->packets_sent,
-    //          "</td></tr><tr><td>GCS Packets Lost</td><td>", gcsStatus->packets_lost, "</td></tr><tr><td>Packets Received from Vehicle</td><td>",
-    //          vehicleStatus->packets_received, "</td></tr><tr><td>Packets Sent to Vehicle</td><td>", vehicleStatus->packets_sent,
-    //          "</td></tr><tr><td>Vehicle Packets Lost</td><td>", vehicleStatus->packets_lost, "</td></tr><tr><td>Radio Messages</td><td>",
-    //          gcsStatus->radio_status_sent, "</td></tr></table><p>System Status</p><table>\n<tr><td width=\"240\">Flash Size</td><td>",
-    //          ESP.getFlashChipRealSize(), "</td></tr><tr><td width=\"240\">Flash Available</td><td>", flash, "</td></tr><tr><td>RAM Left</td><td>",
-    //          String(ESP.getFreeHeap()), "</td></tr><tr><td>Parameters CRC</td><td>", paramCRC, "</td></tr></table></div></body>");
-
     snprintf(buffer, sizeof(buffer), "<div class='formbox'><p>Comm Status</p><table><tr><td width='240'>Packets Received from GCS</td><td>%u</td></tr><tr><td>Packets Sent to GCS</td><td>%u</td></tr><tr><td>GCS Packets Lost</td><td>%u</td></tr><tr><td>Packets Received from Vehicle</td><td>%u</td></tr><tr><td>Packets Sent to Vehicle</td><td>%u</td></tr><tr><td>Vehicle Packets Lost</td><td>%u</td></tr><tr><td>Radio Messages</td><td>%u</td></tr></table><p>System Status</p><table><tr><td width='240'>Flash Size</td><td>%u</td></tr><tr><td width='240'>Flash Available</td><td>%u</td></tr><tr><td>RAM Left</td><td>%u</td></tr><tr><td>Parameters CRC</td><td>%s</td></tr></table></div></body></html>", gcsStatus->packets_received, gcsStatus->packets_sent, gcsStatus->packets_lost, vehicleStatus->packets_received, vehicleStatus->packets_sent, vehicleStatus->packets_lost, gcsStatus->radio_status_sent, ESP.getFlashChipRealSize(), flash, ESP.getFreeHeap(), paramCRC);
     webServer.sendContent(buffer);
 
@@ -854,18 +585,10 @@ static void handle_reboot()
     webServer.sendContent_P(kHEADER1_C4);
     webServer.sendContent_P(kHEADER1_C5);
 
-    // message = vstr;
-    // message += "</p></div><div class=topnav id=BRtopnav><a href=/reboot class=active>Reboot</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a>";
-
-    snprintf(buffer, sizeof(buffer), "%s</p></div><div class=topnav id=BRtopnav><a href=/reboot class=active>Reboot</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a>", vstr);
+    snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/reboot class=active>Reboot</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/ >Setup</a><a href=/update>Firmware Update</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
 
-    // message += FPSTR(kHEADER2);
     webServer.sendContent_P(kHEADER2);
-
-    // message = "<div class='formbox'>";
-    // message += "rebooting ...</body>\n";
-    // message += "</div>";
 
     webServer.sendContent("<div class='formbox'>rebooting ...</div></body></html>");
     webServer.sendContent("");
@@ -902,15 +625,11 @@ MavESP8266Httpd::MavESP8266Httpd()
 void MavESP8266Httpd::begin(MavESP8266Update *updateCB_)
 {
     updateCB = updateCB_;
-    snprintf(vstr, sizeof(vstr), "%u.%u.%u", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
-    // message.reserve(1024);
-    //  webServer.on("/", handle_root);
     webServer.on("/", handle_setup);
     webServer.on("/setparameters", handle_setParameters);
     webServer.on("/getparameters", handle_getParameters);
     webServer.on("/getstatus", handle_getStatus);
     webServer.on("/reboot", handle_reboot);
-    // webServer.on("/setup", handle_setup);
     webServer.on("/info.json", handle_getJSysInfo);
     webServer.on("/status.json", handle_getJSysStatus);
     webServer.on("/log.json", handle_getJLog);
