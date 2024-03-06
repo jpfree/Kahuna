@@ -42,26 +42,29 @@
 #define WIFI_MODE_STA 1
 
 //-- Constants
-#define DEFAULT_WIFI_MODE       WIFI_MODE_AP
-#define DEFAULT_UART_SPEED      57600
-#define DEFAULT_WIFI_CHANNEL    11
-#define DEFAULT_UDP_HPORT       14550
-#define DEFAULT_UDP_CPORT       14555
+#define DEFAULT_WIFI_MODE WIFI_MODE_AP
+#define DEFAULT_UART_SPEED 57600
+#define DEFAULT_WIFI_CHANNEL 11
+#define DEFAULT_UDP_HPORT 14550
+#define DEFAULT_UDP_CPORT 14555
 
-struct stMavEspParameters {
-    char        id[MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN];
-    void*       value;
-    uint16_t    index;
-    uint8_t     length;
-    uint8_t     type;
-    bool        readOnly;
+struct stMavEspParameters
+{
+    char id[MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN];
+    void *value;
+    uint16_t index;
+    uint8_t length;
+    uint8_t type;
+    bool readOnly;
 };
 
-class MavESP8266Parameters {
+class MavESP8266Parameters
+{
 public:
     MavESP8266Parameters();
 
-    enum {
+    enum
+    {
         ID_FWVER = 0,
         ID_DEBUG,
         ID_MODE,
@@ -92,51 +95,51 @@ public:
         ID_COUNT
     };
 
-    void        begin                       ();
-    void        loadAllFromEeprom           ();
-    uint32_t    paramHashCheck              ();
-    void        resetToDefaults             ();
-    void        saveAllToEeprom             ();
+    void begin();
+    void loadAllFromEeprom();
+    uint32_t paramHashCheck();
+    void resetToDefaults();
+    void saveAllToEeprom();
 
-    uint32_t    getSwVersion                ();
-    int8_t      getDebugEnabled             ();
-    int8_t      getWifiMode                 ();
-    uint32_t    getWifiChannel              ();
-    uint16_t    getWifiUdpHport             ();
-    uint16_t    getWifiUdpCport             ();
-    char*       getWifiSsid                 ();
-    char*       getWifiPassword             ();
-    char*       getWifiStaSsid              ();
-    char*       getWifiStaPassword          ();
-    uint32_t    getWifiStaIP                ();
-    uint32_t    getWifiStaGateway           ();
-    uint32_t    getWifiStaSubnet            ();
-    uint32_t    getUartBaudRate             ();
+    uint32_t getSwVersion();
+    int8_t getDebugEnabled();
+    int8_t getWifiMode();
+    char *getLocalIPAddressInString();
+    uint32_t getWifiChannel();
+    uint16_t getWifiUdpHport();
+    uint16_t getWifiUdpCport();
+    char *getWifiSsid();
+    char *getWifiPassword();
+    char *getWifiStaSsid();
+    char *getWifiStaPassword();
+    uint32_t getWifiStaIP();
+    uint32_t getWifiStaGateway();
+    uint32_t getWifiStaSubnet();
+    uint32_t getUartBaudRate();
 
-    void        setDebugEnabled             (int8_t enabled);
-    void        setWifiMode                 (int8_t mode);
-    void        setWifiChannel              (uint32_t channel);
-    void        setWifiUdpHport             (uint16_t port);
-    void        setWifiUdpCport             (uint16_t port);
-    void        setWifiSsid                 (const char* ssid);
-    void        setWifiPassword             (const char* pwd);
-    void        setWifiStaSsid              (const char* ssid);
-    void        setWifiStaPassword          (const char* pwd);
-    void        setWifiStaIP                (uint32_t addr);
-    void        setWifiStaGateway           (uint32_t addr);
-    void        setWifiStaSubnet            (uint32_t addr);
-    void        setUartBaudRate             (uint32_t baud);
-    void        setLocalIPAddress           (uint32_t ipAddress);
+    void setDebugEnabled(int8_t enabled);
+    void setWifiMode(int8_t mode);
+    void setWifiChannel(uint32_t channel);
+    void setWifiUdpHport(uint16_t port);
+    void setWifiUdpCport(uint16_t port);
+    void setWifiSsid(const char *ssid);
+    void setWifiPassword(const char *pwd);
+    void setWifiStaSsid(const char *ssid);
+    void setWifiStaPassword(const char *pwd);
+    void setWifiStaIP(uint32_t addr);
+    void setWifiStaGateway(uint32_t addr);
+    void setWifiStaSubnet(uint32_t addr);
+    void setUartBaudRate(uint32_t baud);
+    void setLocalIPAddress(uint32_t ipAddress);
 
-    stMavEspParameters* getAt               (int index);
-
-private:
-    uint32_t    _crc32part                  (uint8_t* value, uint32_t len, uint32_t crc);
-    uint32_t    _getEepromCrc               ();
-    void        _initEeprom                 ();
+    stMavEspParameters *getAt(int index);
 
 private:
+    uint32_t _crc32part(uint8_t *value, uint32_t len, uint32_t crc);
+    uint32_t _getEepromCrc();
+    void _initEeprom();
 
+private:
 };
 
 #endif
