@@ -12,18 +12,20 @@
     }
 
     .topnav {
+      display: table;
+      display: flex;
       overflow: hidden;
       background-color: #333;
     }
 
     .topnav a {
       float: left;
-      display: block;
       color: #f2f2f2;
       text-align: center;
       padding: 14px 16px;
       text-decoration: none;
       font-size: 20px;
+      order: 1;
     }
 
     .topnav a:hover {
@@ -38,21 +40,6 @@
 
     .topnav .icon {
       display: none;
-    }
-
-    .container {
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .bar1,
-    .bar2,
-    .bar3 {
-      width: 20px;
-      height: 3px;
-      background-color: white;
-      margin: 2px 0;
-      transition: 0.4s;
     }
 
     .formbox {
@@ -122,30 +109,43 @@
     }
 
     @media screen and (max-device-width: 600px) {
-      .topnav a:not(:first-child) {
+      .topnav a:not(.active) {
         display: none;
       }
 
+      .topnav a.active {
+        order: 0;
+        display: table-cell;
+        width: 100%;
+        text-align: left;
+      }
+
       .topnav a.icon {
-        float: right;
         display: block;
+        margin-left: auto;
+        margin-right: 0px;
         padding: none;
       }
 
       .topnav.responsive {
         position: relative;
+        flex-direction: column;
       }
 
       .topnav.responsive .icon {
+        display: table-cell;
         position: absolute;
-        padding: none;
+        margin-left: 0px;
         right: 0;
         top: 0;
+        padding-top: auto;
+        padding-bottom: auto;
       }
 
       .topnav.responsive a {
         float: none;
         display: block;
+        display: flex;
         text-align: left;
       }
 
@@ -167,10 +167,11 @@
         width: 60px;
         height: 10px;
         background-color: white;
-        margin: 4px 0;
+        margin: 8px 0;
       }
 
       .container {
+        display: inline-block;
         margin-top: auto;
         margin-bottom: auto;
       }
@@ -256,13 +257,13 @@
 
 
   <div class="topnav" id="BRtopnav">
-    <a href="/setup" class="active">Setup</a>
+    <a href="/setup">Setup</a>
     <a href="/getstatus">Status</a>
     <a href="/getparameters">Parameters</a>
-    <a href="/update">Firmware Update</a>
+    <a href="/update" class="active">Firmware Update</a>
     <a href="/reboot">Reboot</a>
     <a href="javascript:void(0);" class="icon" onclick="changeTopnav()">
-      <div class="container" onclick="hamburgerMenu(this)">
+      <div class="container">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
