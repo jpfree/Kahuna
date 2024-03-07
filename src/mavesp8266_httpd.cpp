@@ -255,7 +255,7 @@ void handle_getParameters() // This can be improved a lot
     webServer.sendContent_P(kHEADER2);
 
     // Chunk 4
-    webServer.sendContent("<div class=p_content><div class='formbox'><table><tr><td width=\"240\">Name</td><td>Value</td></tr>");
+    webServer.sendContent("<div class=p_content><div class='formbox'><table><tr><td>Name</td><td>Value</td></tr>");
 
     for (int i = 0; i < MavESP8266Parameters::ID_COUNT; i++)
     {
