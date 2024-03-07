@@ -43,21 +43,15 @@
     }
 
     .formbox {
-      max-width: 50%;
-      margin: 20px;
+
+      margin-top: 20px;
       padding: 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
       background-color: #f2f2f2;
     }
 
-    input[type='submit'] {
-      margin: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f2f2f2;
-    }
+
 
     input[type='file'] {
       margin: 20px;
@@ -106,6 +100,55 @@
       margin-right: 5px;
       padding: 0;
       font-size: 10px;
+    }
+
+    input[type=text] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    label {
+      padding: 12px 12px 12px 0;
+      display: inline-block;
+    }
+
+    input[type=submit] {
+      margin-top: 20px;
+      background-color: #61206e;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      float: left;
+    }
+
+    .p_content {
+      padding-left: 20px;
+      padding-right: 20px;
+      max-width: 650px;
+    }
+
+    .col-l {
+      float: left;
+      width: 35%;
+      margin-top: 6px;
+    }
+
+    .col-r {
+      float: left;
+      width: 65%;
+      margin-top: 6px;
+    }
+
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
     }
 
     @media screen and (max-device-width: 600px) {
@@ -177,7 +220,6 @@
       }
 
       .formbox {
-        margin: 20px 2px;
         max-width: 100%;
       }
 
@@ -198,6 +240,27 @@
       #FW {
         font-size: 25px;
       }
+
+      .col-l,
+      .col-r {
+        width: 100%;
+        margin-top: 0;
+      }
+
+      .p_content {
+        max-width: 100%;
+      }
+
+      input[type='submit'] {
+        width: 100%;
+        margin: 20px 0px;
+      }
+
+      td {
+        -webkit-text-size-adjust: none;
+      }
+
+
 
     }
   </style>
@@ -272,7 +335,7 @@
   </div>
 
 
-  <form action="http://192.168.4.1/setparameters" method="post">
+  <!-- <form action="http://192.168.4.1/setparameters" method="post">
     <div class="formbox">
       WiFi Mode:&nbsp;<input type="radio" name="mode" value="0" checked="">Access Point
       <input type="radio" name="mode" value="1">Station<br>
@@ -294,10 +357,208 @@
       Station Gateway:&nbsp;<input type="text" name="gatewaysta" value="(IP unset)"><br>
       Station Subnet:&nbsp;<input type="text" name="subnetsta" value="(IP unset)"><br>
     </div>
-  </form>
+  </form> -->
 
-  <form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' name='update'><br><input
-      type='submit' value='Update'></form>
+  <!-- <form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' name='update'><br><input
+      type='submit' value='Update'></form> -->
+
+
+  <div class="p_content">
+
+    <form action="http://192.168.4.1/setparameters" method="post">
+      <div class="formbox">
+        <div class="row">
+          <div class="col-l">
+            <label>WiFi Mode</label>
+          </div>
+          <div class="col-r">
+            <input type="radio" name="mode" value="0" checked=""><label for="0">Access Point</label>
+            <input type="radio" name="mode" value="1"><label for="1">Station</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>Baudrate</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="baud" value="57600">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>Host Port</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="hport" value="14550">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>Client Port</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="cport" value="14555">
+          </div>
+        </div>
+      </div>
+
+      <div class="formbox">
+        <div class="row">
+          <div class="col-l">
+            <label>AP SSID</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="ssid" value="BeyondRobotix">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>AP Password (min len 8)</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="pwd" value="beyondrobotix">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>WiFi Channel</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="channel" value="11">
+          </div>
+        </div>
+      </div>
+
+      <div class="formbox">
+        <div class="row">
+          <div class="col-l">
+            <label>Station SSID</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="ssidsta" value="BeyondRobotix">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>Station Password</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="pwdsta" value="beyondrobotix">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>Station IP</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="ipsta" value="(IP unset)">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>Station Gateway</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="gatewaysta" value="(IP unset)">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-l">
+            <label>Station Subnet</label>
+          </div>
+          <div class="col-r">
+            <input type="text" name="subnetsta" value="(IP unset)">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <input type='submit' value='Save'>
+      </div>
+    </form>
+
+  </div>
+
+  <div class="p_content">
+
+    <div class="row">
+      <div class="col-l">
+        <label>Name</label>
+      </div>
+      <div class="col-r">
+        Value
+      </div>
+    </div>
+
+    <table>
+      <tbody>
+        <tr>
+          <td width="240">Name</td>
+          <td>Value</td>
+        </tr>
+        <tr>
+          <td>SW_VER</td>
+          <td>1.2.4</td>
+        </tr>
+        <tr>
+          <td>DEBUG_ENABLED</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>WIFI_MODE</td>
+          <td>AP</td>
+        </tr>
+        <tr>
+          <td>WIFI_CHANNEL</td>
+          <td>11</td>
+        </tr>
+        <tr>
+          <td>WIFI_UDP_HPORT</td>
+          <td>14550</td>
+        </tr>
+        <tr>
+          <td>WIFI_UDP_CPORT</td>
+          <td>14555</td>
+        </tr>
+        <tr>
+          <td>WIFI_IPADDRESS</td>
+          <td>192.168.4.1</td>
+        </tr>
+        <tr>
+          <td>WIFI_SSID1</td>
+          <td>BeyondRobotix</td>
+        </tr>
+        <tr>
+          <td>WIFI_PASSWORD1</td>
+          <td>beyondrobotix</td>
+        </tr>
+        <tr>
+          <td>WIFI_SSIDSTA1</td>
+          <td>BeyondRobotix</td>
+        </tr>
+        <tr>
+          <td>WIFI_PWDSTA1</td>
+          <td>beyondrobotix</td>
+        </tr>
+        <tr>
+          <td>WIFI_IPSTA</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>WIFI_GATEWAYSTA</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>WIFI_SUBNET_STA</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>UART_BAUDRATE</td>
+          <td>57600</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
 </body>
 
