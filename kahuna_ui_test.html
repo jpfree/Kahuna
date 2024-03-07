@@ -151,6 +151,11 @@
       clear: both;
     }
 
+    table {
+      table-layout: fixed;
+      width: 100%;
+    }
+
     @media screen and (max-device-width: 600px) {
       .topnav a:not(.active) {
         display: none;
@@ -259,6 +264,14 @@
       td {
         -webkit-text-size-adjust: none;
       }
+
+      /* .left {
+        width: fit-content;
+      } */
+
+      /* .right {
+        width: 30%;
+      } */
 
 
 
@@ -479,85 +492,59 @@
 
   </div>
 
-  <div class="p_content">
-
-    <div class="row">
-      <div class="col-l">
-        <label>Name</label>
-      </div>
-      <div class="col-r">
-        Value
-      </div>
+  <div class=p_content>
+    <div class='formbox'>
+      <p>Comm Status</p>
+      <table>
+        <tr>
+          <td class="left">Packets Received from GCS</td>
+          <td class="right">%u</td>
+        </tr>
+        <tr>
+          <td>Packets Sent to GCS</td>
+          <td>%u</td>
+        </tr>
+        <tr>
+          <td>GCS Packets Lost</td>
+          <td>%u</td>
+        </tr>
+        <tr>
+          <td>Packets Received from Vehicle</td>
+          <td>%u</td>
+        </tr>
+        <tr>
+          <td>Packets Sent to Vehicle</td>
+          <td>%u</td>
+        </tr>
+        <tr>
+          <td>Vehicle Packets Lost</td>
+          <td>%u</td>
+        </tr>
+        <tr>
+          <td>Radio Messages</td>
+          <td>%u</td>
+        </tr>
+      </table>
+      <p>System Status</p>
+      <table>
+        <tr>
+          <td class="left">Flash Size</td>
+          <td class="right">%u</td>
+        </tr>
+        <tr>
+          <td>Flash Available</td>
+          <td>%u</td>
+        </tr>
+        <tr>
+          <td>RAM Left</td>
+          <td>%u</td>
+        </tr>
+        <tr>
+          <td>Parameters CRC</td>
+          <td>%s</td>
+        </tr>
+      </table>
     </div>
-
-    <table>
-      <tbody>
-        <tr>
-          <td width="240">Name</td>
-          <td>Value</td>
-        </tr>
-        <tr>
-          <td>SW_VER</td>
-          <td>1.2.4</td>
-        </tr>
-        <tr>
-          <td>DEBUG_ENABLED</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>WIFI_MODE</td>
-          <td>AP</td>
-        </tr>
-        <tr>
-          <td>WIFI_CHANNEL</td>
-          <td>11</td>
-        </tr>
-        <tr>
-          <td>WIFI_UDP_HPORT</td>
-          <td>14550</td>
-        </tr>
-        <tr>
-          <td>WIFI_UDP_CPORT</td>
-          <td>14555</td>
-        </tr>
-        <tr>
-          <td>WIFI_IPADDRESS</td>
-          <td>192.168.4.1</td>
-        </tr>
-        <tr>
-          <td>WIFI_SSID1</td>
-          <td>BeyondRobotix</td>
-        </tr>
-        <tr>
-          <td>WIFI_PASSWORD1</td>
-          <td>beyondrobotix</td>
-        </tr>
-        <tr>
-          <td>WIFI_SSIDSTA1</td>
-          <td>BeyondRobotix</td>
-        </tr>
-        <tr>
-          <td>WIFI_PWDSTA1</td>
-          <td>beyondrobotix</td>
-        </tr>
-        <tr>
-          <td>WIFI_IPSTA</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>WIFI_GATEWAYSTA</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>WIFI_SUBNET_STA</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>UART_BAUDRATE</td>
-          <td>57600</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 
 </body>
