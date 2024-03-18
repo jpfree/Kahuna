@@ -54,20 +54,41 @@
 
 
     input[type='file'] {
+      font-size: 1em;
       margin: 20px;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
       background-color: #f2f2f2;
+      -webkit-appearence: none;
     }
 
-    input[type="file"]::-webkit-file-upload-button {
+    /* input::file-selector-button {
+      display: inline-block;
       margin: 20px;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
       background-color: #f2f2f2;
-    }
+    } */
+
+    /* input::-webkit-file-upload-button {
+      margin: 20px;
+      padding: 10px;
+      max-width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      -webkit-appearence: none;
+    } */
+
+    /* input[type="file"]::-webkit-file-upload-button {
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+    } */
 
     #logo {
       display: block;
@@ -205,9 +226,9 @@
         font-size: 250%;
       }
 
-      input {
+      /* input {
         font-size: 100%;
-      }
+      } */
 
       .bar1,
       .bar2,
@@ -294,7 +315,7 @@
 
 <body>
   <div id="logocontainer">
-    <svg id="logo" version="1.1" viewBox="0 0 210 100" xmlns="http://www.w3.org/2000/svg">
+    <svg id="logo" version="1.1" viewBox="0 0 230 100" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(3.62 20.395)">
         <g transform="translate(-.62316 -4.3941)">
           <g transform="matrix(1.848 0 0 1.848 -9.7077 -3.7351)" fill="none" stroke="#61206e">
@@ -347,206 +368,12 @@
     </a>
   </div>
 
-
-  <!-- <form action="http://192.168.4.1/setparameters" method="post">
-    <div class="formbox">
-      WiFi Mode:&nbsp;<input type="radio" name="mode" value="0" checked="">Access Point
-      <input type="radio" name="mode" value="1">Station<br>
-      Baudrate:&nbsp;<input type="text" name="baud" value="57600"><br>
-      Host Port:&nbsp;<input type="text" name="hport" value="14550"><br>
-      Client Port:&nbsp;<input type="text" name="cport" value="14555"><br>
-    </div>
-
-    <div class="formbox">
-      AP SSID:&nbsp;<input type="text" name="ssid" value="BeyondRobotix"><br>
-      AP Password (min len 8):&nbsp;<input type="text" name="pwd" value="beyondrobotix"><br>
-      WiFi Channel:&nbsp;<input type="text" name="channel" value="11"><br>
-    </div>
-
-    <div class="formbox">
-      Station SSID:&nbsp;<input type="text" name="ssidsta" value="BeyondRobotix"><br>
-      Station Password:&nbsp;<input type="text" name="pwdsta" value="beyondrobotix"><br>
-      Station IP:&nbsp;<input type="text" name="ipsta" value="(IP unset)"><br>
-      Station Gateway:&nbsp;<input type="text" name="gatewaysta" value="(IP unset)"><br>
-      Station Subnet:&nbsp;<input type="text" name="subnetsta" value="(IP unset)"><br>
-    </div>
-  </form> -->
-
-  <!-- <form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' name='update'><br><input
-      type='submit' value='Update'></form> -->
-
-
-  <div class="p_content">
-
-    <form action="http://192.168.4.1/setparameters" method="post">
-      <div class="formbox">
-        <div class="row">
-          <div class="col-l">
-            <label>WiFi Mode</label>
-          </div>
-          <div class="col-r">
-            <input type="radio" name="mode" value="0" checked=""><label for="0">Access Point</label>
-            <input type="radio" name="mode" value="1"><label for="1">Station</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>Baudrate</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="baud" value="57600">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>Host Port</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="hport" value="14550">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>Client Port</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="cport" value="14555">
-          </div>
-        </div>
-      </div>
-
-      <div class="formbox">
-        <div class="row">
-          <div class="col-l">
-            <label>AP SSID</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="ssid" value="BeyondRobotix">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>AP Password (min len 8)</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="pwd" value="beyondrobotix">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>WiFi Channel</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="channel" value="11">
-          </div>
-        </div>
-      </div>
-
-      <div class="formbox">
-        <div class="row">
-          <div class="col-l">
-            <label>Station SSID</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="ssidsta" value="BeyondRobotix">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>Station Password</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="pwdsta" value="beyondrobotix">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>Station IP</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="ipsta" value="(IP unset)">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>Station Gateway</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="gatewaysta" value="(IP unset)">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-l">
-            <label>Station Subnet</label>
-          </div>
-          <div class="col-r">
-            <input type="text" name="subnetsta" value="(IP unset)">
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <input type='submit' value='Save'>
-      </div>
-    </form>
-
-  </div>
-
   <div class=p_content>
     <div class='formbox'>
-      <p>Comm Status</p>
-      <table>
-        <tr>
-          <td class="left">Packets Received from GCS</td>
-          <td class="right">%u</td>
-        </tr>
-        <tr>
-          <td>Packets Sent to GCS</td>
-          <td>%u</td>
-        </tr>
-        <tr>
-          <td>GCS Packets Lost</td>
-          <td>%u</td>
-        </tr>
-        <tr>
-          <td>Packets Received from Vehicle</td>
-          <td>%u</td>
-        </tr>
-        <tr>
-          <td>Packets Sent to Vehicle</td>
-          <td>%u</td>
-        </tr>
-        <tr>
-          <td>Vehicle Packets Lost</td>
-          <td>%u</td>
-        </tr>
-        <tr>
-          <td>Radio Messages</td>
-          <td>%u</td>
-        </tr>
-      </table>
-      <p>System Status</p>
-      <table>
-        <tr>
-          <td class="left">Flash Size</td>
-          <td class="right">%u</td>
-        </tr>
-        <tr>
-          <td>Flash Available</td>
-          <td>%u</td>
-        </tr>
-        <tr>
-          <td>RAM Left</td>
-          <td>%u</td>
-        </tr>
-        <tr>
-          <td>Parameters CRC</td>
-          <td>%s</td>
-        </tr>
-      </table>
-    </div>
+      <p>Upload new firmware</p>
+      <form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' name='update'><br></form>
+    </div><input type='submit' value='Update'></form>
   </div>
-
 </body>
 
 </html>
