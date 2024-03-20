@@ -144,18 +144,26 @@ void check_wifi_connected()
 }
 
 //---------------------------------------------------------------------------------
-//-- Reset all parameters whenever the reset gpio pin is active
+//-- Reset all parameters whenever the reset gpio pin is active within first 5s of boot
 IRAM_ATTR void reset_interrupt()
 {
-    Parameters.resetToDefaults();
-    Parameters.saveAllToEeprom();
-    ESP.reset();
+    if (millis() < 5000)
+    {
+        Parameters.resetToDefaults();
+        Parameters.saveAllToEeprom();
+        ESP.reset();
+    }
+    else
+    {
+        detachInterrupt(GPIO02);
+    }
 }
 
 void setup_station()
 {
     //-- Connect to an existing network
     ledManager.setLED(ledManager.wifi, ledManager.doubleBlink); // Double blink while searching for station
+    WiFi.setSleepMode(WIFI_NONE_SLEEP);                         // Aparrently it can go to sleep in station mode
     WiFi.mode(WIFI_STA);
     WiFi.config(Parameters.getWifiStaIP(), Parameters.getWifiStaGateway(), Parameters.getWifiStaSubnet(), 0U, 0U);
     WiFi.begin(Parameters.getWifiStaSsid(), Parameters.getWifiStaPassword());

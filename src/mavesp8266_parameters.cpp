@@ -51,6 +51,7 @@ const char *kDEFAULT_PASSWORD = "beyondrobotix"; // -- This MUST be 8 characters
 uint32_t _sw_version;
 int8_t _debug_enabled;
 int8_t _wifi_mode;
+char _wifi_ip_address_str[16];
 uint32_t _wifi_channel;
 uint16_t _wifi_udp_hport;
 uint16_t _wifi_udp_cport;
@@ -119,6 +120,7 @@ void MavESP8266Parameters::begin()
 void MavESP8266Parameters::setLocalIPAddress(uint32_t ipAddress)
 {
     _wifi_ip_address = ipAddress;
+    snprintf(_wifi_ip_address_str, sizeof(_wifi_ip_address_str), "%d.%d.%d.%d", (int)(_wifi_ip_address & 0xFF), (int)(_wifi_ip_address >> 8 & 0xFF), (int)(_wifi_ip_address >> 16 & 0xFF), (int)(_wifi_ip_address >> 24 & 0xFF));
 }
 
 //---------------------------------------------------------------------------------
@@ -137,6 +139,7 @@ MavESP8266Parameters::getAt(int index)
 uint32_t MavESP8266Parameters::getSwVersion() { return _sw_version; }
 int8_t MavESP8266Parameters::getDebugEnabled() { return _debug_enabled; }
 int8_t MavESP8266Parameters::getWifiMode() { return _wifi_mode; }
+char *MavESP8266Parameters::getLocalIPAddressInString() { return _wifi_ip_address_str; }
 uint32_t MavESP8266Parameters::getWifiChannel() { return _wifi_channel; }
 uint16_t MavESP8266Parameters::getWifiUdpHport() { return _wifi_udp_hport; }
 uint16_t MavESP8266Parameters::getWifiUdpCport() { return _wifi_udp_cport; }
