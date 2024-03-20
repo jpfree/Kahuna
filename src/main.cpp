@@ -144,12 +144,19 @@ void check_wifi_connected()
 }
 
 //---------------------------------------------------------------------------------
-//-- Reset all parameters whenever the reset gpio pin is active
+//-- Reset all parameters whenever the reset gpio pin is active within first 5s of boot
 IRAM_ATTR void reset_interrupt()
 {
-    Parameters.resetToDefaults();
-    Parameters.saveAllToEeprom();
-    ESP.reset();
+    if (millis() < 5000)
+    {
+        Parameters.resetToDefaults();
+        Parameters.saveAllToEeprom();
+        ESP.reset();
+    }
+    else
+    {
+        detachInterrupt(GPIO02);
+    }
 }
 
 void setup_station()
