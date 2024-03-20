@@ -1,27 +1,8 @@
-# MavESP8266
+# Beyond Robotix Kahuna Firmware
 
 ## Current Binary
 
-Download the current version (MAVLink V2) from here: [Firmware version 1.2.2](http://www.grubba.com/mavesp8266/firmware-1.2.2.bin)
-
-Download the legacy version (MAVLink V1) from here: [Firmware version 1.1.1](http://www.grubba.com/mavesp8266/firmware-1.1.1.bin)
-
-## ESP8266 WiFi Access Point and MavLink Bridge
-
-[![Join the chat at https://gitter.im/dogmaphobic/mavesp8266](https://badges.gitter.im/dogmaphobic/mavesp8266.svg)](https://gitter.im/dogmaphobic/mavesp8266?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-This was developed using a [NodeMCU v2 Dev Kit](http://www.seeedstudio.com/depot/NodeMCU-v2-Lua-based-ESP8266-development-kit-p-2415.html) as it conveniently provides a secondary UART for debugging. It has been tested with the ESP-01 shipped with the [PixRacer](https://pixhawk.org/modules/pixracer) and it is stable at 57600 baud.
-
-The build enviroment is based on [PlatformIO](http://platformio.org). Follow the instructions found here: http://platformio.org/#!/get-started (only tested on Mac OS) for installing it but skip the ```platform init``` step as this has already been done, modified and it is included in this repository. In summary:
-
-```
-brew install platformio
-git clone --recursive https://github.com/dogmaphobic/mavesp8266.git
-cd mavesp8266
-platformio run
-```
-
-When you run ```platformio run``` for the first time, it will download the toolchains and all necessary libraries automatically.
+The latest release is available in the releases section on the right-hand side. Download the .bin file and upload it to your kahuna via the web UI to update.
 
 ### Useful commands:
 
@@ -42,7 +23,7 @@ The ```git clone --recursive``` above not only cloned the MavESP8266 repository 
 
 User level (as well as wiring) instructions can be found [here for px4](https://docs.px4.io/en/telemetry/esp8266_wifi_module.html) and [here for ArduPilot](http://ardupilot.org/copter/docs/common-esp8266-telemetry.html)
 
-* Resetting to Defaults: In case you change the parameters and get locked out of the module, all the parameters can be reset by bringing the GPIO02 pin low (Connect GPIO02 pin to GND pin). 
+* Resetting to Defaults: Parameters can be reset to default by jumping J2 in the first 5 seconds after powering the Kahuna.
 
 ### MavLink Protocol
 
