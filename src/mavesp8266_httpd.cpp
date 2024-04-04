@@ -49,7 +49,7 @@ const char PROGMEM kTEXTHTML[] = "text/html";
 const char PROGMEM kBADARG[] = "BAD ARGS";
 const char PROGMEM kAPPJSON[] = "application/json";
 const char PROGMEM kACCESSCTL[] = "Access-Control-Allow-Origin";
-const char PROGMEM kUPLOADFORM[] = "<div class=p_content><div class='formbox'><p>Upload new firmware</p><form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' accept='.bin' name='update'><br></form></div><input type='submit' value='Update'></form></div></body></html>";
+const char PROGMEM kUPLOADFORM[] = "<div class=p_content><div class='formbox'><p>Upload new firmware</p><form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' accept='.bin' name='update'><br></div><input type='submit' value='Update'></form></div></body></html>";
 
 const char PROGMEM kHEADER2[] = "<a href=javascript:void(0); class=icon onclick=changeTopnav()><div class=container><div class=bar1></div><div class=bar2></div><div class=bar3></div></div></a></div>";
 
