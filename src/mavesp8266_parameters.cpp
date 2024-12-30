@@ -96,7 +96,7 @@ struct stMavEspParameters mavParameters[] = {
     {"WIFI_IPSTA", &_wifi_ipsta, MavESP8266Parameters::ID_IPSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"WIFI_GATEWAYSTA", &_wifi_gatewaysta, MavESP8266Parameters::ID_GATEWAYSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"WIFI_SUBNET_STA", &_wifi_subnetsta, MavESP8266Parameters::ID_SUBNETSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
-    {"UART_BAUDRATE", &_uart_baud_rate, MavESP8266Parameters::ID_UART, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false}
+    {"UART_BAUDRATE", &_uart_baud_rate, MavESP8266Parameters::ID_UART, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"TARGET_ADDRESS", &_target_address, MavESP8266Parameters::ID_TARGET_ADDRESS, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false}
 
 };
