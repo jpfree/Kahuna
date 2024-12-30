@@ -65,6 +65,7 @@ uint32_t _wifi_gatewaysta;
 uint32_t _wifi_subnetsta;
 uint32_t _uart_baud_rate;
 uint32_t _flash_left;
+uint32_t _target_address;
 
 //-- Parameters
 //   No string support in parameters so we stash a char[16] into 4 uint32_t
@@ -95,7 +96,10 @@ struct stMavEspParameters mavParameters[] = {
     {"WIFI_IPSTA", &_wifi_ipsta, MavESP8266Parameters::ID_IPSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"WIFI_GATEWAYSTA", &_wifi_gatewaysta, MavESP8266Parameters::ID_GATEWAYSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"WIFI_SUBNET_STA", &_wifi_subnetsta, MavESP8266Parameters::ID_SUBNETSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
-    {"UART_BAUDRATE", &_uart_baud_rate, MavESP8266Parameters::ID_UART, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false}};
+    {"UART_BAUDRATE", &_uart_baud_rate, MavESP8266Parameters::ID_UART, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false}
+    {"TARGET_ADDRESS", &_target_address, MavESP8266Parameters::ID_TARGET_ADDRESS, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false}
+
+};
 
 //---------------------------------------------------------------------------------
 MavESP8266Parameters::MavESP8266Parameters()
@@ -151,6 +155,7 @@ uint32_t MavESP8266Parameters::getWifiStaIP() { return _wifi_ipsta; }
 uint32_t MavESP8266Parameters::getWifiStaGateway() { return _wifi_gatewaysta; }
 uint32_t MavESP8266Parameters::getWifiStaSubnet() { return _wifi_subnetsta; }
 uint32_t MavESP8266Parameters::getUartBaudRate() { return _uart_baud_rate; }
+uint32_t MavESP8266Parameters::getTargetAddress() { return _target_address; }
 
 //---------------------------------------------------------------------------------
 //-- Reset all to defaults
@@ -163,6 +168,7 @@ void MavESP8266Parameters::resetToDefaults()
     _wifi_udp_hport = DEFAULT_UDP_HPORT;
     _wifi_udp_cport = DEFAULT_UDP_CPORT;
     _uart_baud_rate = DEFAULT_UART_SPEED;
+    _target_address = DEFAULT_TARGET_ADDRESS;
     _wifi_ipsta = 0;
     _wifi_gatewaysta = 0;
     _wifi_subnetsta = 0;
@@ -402,4 +408,9 @@ void MavESP8266Parameters::setWifiStaSubnet(uint32_t addr)
 void MavESP8266Parameters::setUartBaudRate(uint32_t baud)
 {
     _uart_baud_rate = baud;
+}
+
+void MavESP8266Parameters::setTargetAddress(uint32_t addr)
+{
+    _target_address = addr;
 }
