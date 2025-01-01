@@ -76,6 +76,7 @@ const char *kDEBUG = "debug";
 const char *kREBOOT = "reboot";
 const char *kPOSITION = "position";
 const char *kMODE = "mode";
+const char *kGCS_IP = "gcs_ip";
 
 const char *kFlashMaps[7] = {
     "512KB (256/256)",
@@ -340,8 +341,9 @@ static void handle_setup()
     IPAddress StaIP = getWorld()->getParameters()->getWifiStaIP();
     IPAddress StaGateway = getWorld()->getParameters()->getWifiStaGateway();
     IPAddress StaSubnet = getWorld()->getParameters()->getWifiStaSubnet();
+    uint32_t GCS_IP = getWorld()->getParameters()->getTargetAddress();
 
-    snprintf(buffer, sizeof(buffer), "<div class=row><div class=col-l><label>Station IP</label></div><div class=col-r><input value='%s' name=ipsta  type=text></div></div><div class=row><div class=col-l><label>Station Gateway</label></div><div class=col-r><input value='%s' name=gatewaysta  type=text></div></div><div class=row><div class=col-l><label>Station Subnet</label></div><div class=col-r><input value='%s' name=subnetsta  type=text></div></div></div><div class=row><input value=Save type=submit></div></form></div></body></html>", StaIP.toString().c_str(), StaGateway.toString().c_str(), StaSubnet.toString().c_str());
+    snprintf(buffer, sizeof(buffer), "<div class=row><div class=col-l><label>Station IP</label></div><div class=col-r><input value='%s' name=ipsta  type=text></div></div><div class=row><div class=col-l><label>Station Gateway</label></div><div class=col-r><input value='%s' name=gatewaysta  type=text></div></div><div class=row><div class=col-l><label>Station Subnet</label></div><div class=col-r><input value='%s' name=subnetsta  type=text></div></div><div class=row><div class=col-l><label>GCS IP address</label></div><div class=col-r><input value='%u' name=gcs_ip type=text></div></div></div><div class=row><input value=Save type=submit></div></form></div></body></html>", StaIP.toString().c_str(), StaGateway.toString().c_str(), StaSubnet.toString().c_str(), GCS_IP);
     webServer.sendContent(buffer);
 
     webServer.sendContent("");
@@ -552,6 +554,11 @@ void handle_setParameters()
     {
         ok = true;
         getWorld()->getParameters()->setWifiMode(webServer.arg(kMODE).toInt());
+    }
+    if (webServer.hasArg(kGCS_IP))
+    {
+        ok = true;
+        getWorld()->getParameters()->setTargetAddress(webServer.arg(kGCS_IP).toInt());
     }
     if (webServer.hasArg(kREBOOT))
     {

@@ -93,8 +93,8 @@ public:
         ID_GATEWAYSTA,
         ID_SUBNETSTA,
         ID_UART,
-        ID_COUNT,
-        ID_TARGET_ADDRESS
+        ID_TARGET_ADDRESS,
+        ID_COUNT
     };
 
     void begin();
