@@ -192,8 +192,19 @@ void setup_wifi()
     DEBUG_LOG("Local IP: %s\n", localIP.toString().c_str());
 
     Parameters.setLocalIPAddress(localIP);
-    IPAddress gcs_ip(localIP);
-    gcs_ip[3] = Parameters.getTargetAddress();
+
+    IPAddress gcs_ip;
+    if (Parameters.getWifiStaTarget() == 0)
+    {
+        // Broadcast
+        gcs_ip = localIP;
+        gcs_ip[3] = 255;
+    }
+    else
+    {
+        gcs_ip = Parameters.getWifiStaTarget();
+    }
+
     GCS.begin(&Vehicle, gcs_ip);
     //-- Initialize Update Server
     updateServer.begin(&updateStatus);

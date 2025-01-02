@@ -92,8 +92,8 @@ public:
         ID_IPSTA,
         ID_GATEWAYSTA,
         ID_SUBNETSTA,
+        ID_TARGETSTA,
         ID_UART,
-        ID_TARGET_ADDRESS,
         ID_COUNT
     };
 
@@ -106,7 +106,7 @@ public:
     uint32_t getSwVersion();
     int8_t getDebugEnabled();
     int8_t getWifiMode();
-    char *getLocalIPAddressInString();
+    uint32_t getLocalIPAddress();
     uint32_t getWifiChannel();
     uint16_t getWifiUdpHport();
     uint16_t getWifiUdpCport();
@@ -118,7 +118,7 @@ public:
     uint32_t getWifiStaGateway();
     uint32_t getWifiStaSubnet();
     uint32_t getUartBaudRate();
-    uint32_t getTargetAddress();
+    uint32_t getWifiStaTarget();
 
     void setDebugEnabled(int8_t enabled);
     void setWifiMode(int8_t mode);
@@ -134,7 +134,7 @@ public:
     void setWifiStaSubnet(uint32_t addr);
     void setUartBaudRate(uint32_t baud);
     void setLocalIPAddress(uint32_t ipAddress);
-    void setTargetAddress(uint32_t address);
+    void setWifiStaTarget(uint32_t address);
 
     stMavEspParameters *getAt(int index);
 
