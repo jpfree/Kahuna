@@ -76,6 +76,7 @@ const char *kDEBUG = "debug";
 const char *kREBOOT = "reboot";
 const char *kPOSITION = "position";
 const char *kMODE = "mode";
+const char *kGCS_IP = "gcs_ip";
 
 const char *kFlashMaps[7] = {
     "512KB (256/256)",
@@ -255,7 +256,9 @@ void handle_getParameters() // This can be improved a lot
         }
         else if (i == getWorld()->getParameters()->ID_IPADDRESS)
         {
-            snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%s</td></tr>", getWorld()->getParameters()->getAt(i)->id, getWorld()->getParameters()->getLocalIPAddressInString());
+
+            uint32_t local_ip = getWorld()->getParameters()->getLocalIPAddress();
+            snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%d.%d.%d.%d</td></tr>", getWorld()->getParameters()->getAt(i)->id, (int)(local_ip & 0xFF), (int)(local_ip >> 8 & 0xFF), (int)(local_ip >> 16 & 0xFF), (int)(local_ip >> 24 & 0xFF));
             webServer.sendContent(buffer);
         }
         else if (i == getWorld()->getParameters()->ID_SSID1)
@@ -289,6 +292,30 @@ void handle_getParameters() // This can be improved a lot
         }
         else if (i > getWorld()->getParameters()->ID_PASSSTA1 && i <= getWorld()->getParameters()->ID_PASSSTA4)
         {
+        }
+        else if (i == getWorld()->getParameters()->ID_IPSTA)
+        {
+            uint32_t wifi_sta_ip = getWorld()->getParameters()->getWifiStaIP();
+            snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%d.%d.%d.%d</td></tr>", getWorld()->getParameters()->getAt(i)->id, (int)(wifi_sta_ip & 0xFF), (int)(wifi_sta_ip >> 8 & 0xFF), (int)(wifi_sta_ip >> 16 & 0xFF), (int)(wifi_sta_ip >> 24 & 0xFF));
+            webServer.sendContent(buffer);
+        }
+        else if (i == getWorld()->getParameters()->ID_GATEWAYSTA)
+        {
+            uint32_t wifi_sta_gateway = getWorld()->getParameters()->getWifiStaGateway();
+            snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%d.%d.%d.%d</td></tr>", getWorld()->getParameters()->getAt(i)->id, (int)(wifi_sta_gateway & 0xFF), (int)(wifi_sta_gateway >> 8 & 0xFF), (int)(wifi_sta_gateway >> 16 & 0xFF), (int)(wifi_sta_gateway >> 24 & 0xFF));
+            webServer.sendContent(buffer);
+        }
+        else if (i == getWorld()->getParameters()->ID_SUBNETSTA)
+        {
+            uint32_t wifi_sta_subnet = getWorld()->getParameters()->getWifiStaSubnet();
+            snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%d.%d.%d.%d</td></tr>", getWorld()->getParameters()->getAt(i)->id, (int)(wifi_sta_subnet & 0xFF), (int)(wifi_sta_subnet >> 8 & 0xFF), (int)(wifi_sta_subnet >> 16 & 0xFF), (int)(wifi_sta_subnet >> 24 & 0xFF));
+            webServer.sendContent(buffer);
+        }
+        else if (i == getWorld()->getParameters()->ID_TARGETSTA)
+        {
+            uint32_t gcs_target_ip = getWorld()->getParameters()->getWifiStaTarget();
+            snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%d.%d.%d.%d</td></tr>", getWorld()->getParameters()->getAt(i)->id, (int)(gcs_target_ip & 0xFF), (int)(gcs_target_ip >> 8 & 0xFF), (int)(gcs_target_ip >> 16 & 0xFF), (int)(gcs_target_ip >> 24 & 0xFF));
+            webServer.sendContent(buffer);
         }
         else // integer values
         {
@@ -328,7 +355,7 @@ static void handle_setup()
     // Chunk 3
     webServer.sendContent_P(kHEADER2);
 
-    snprintf(buffer, sizeof(buffer), "<div class=p_content><form action=http://192.168.4.1/setparameters method=post><div class=formbox><div class=row><div class=col-l><label>WiFi Mode</label></div><div class=col-r><input value=0 name=mode type=radio%s><label for=0>Access Point</label> <input value=1 name=mode type=radio%s><label for=1>Station</label></div></div><div class=row><div class=col-l><label>Baudrate</label></div><div class=col-r><input value=%u name=baud type=text></div></div><div class=row><div class=col-l><label>Host Port</label></div><div class=col-r><input value=%u name=hport  type=text></div></div><div class=row><div class=col-l><label>Client Port</label></div><div class=col-r><input value=%u name=cport  type=text></div></div></div>", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP ? " checked" : "", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_STA ? " checked" : "", getWorld()->getParameters()->getUartBaudRate(), getWorld()->getParameters()->getWifiUdpHport(), getWorld()->getParameters()->getWifiUdpCport());
+    snprintf(buffer, sizeof(buffer), "<div class=p_content><form action=/setparameters method=post><div class=formbox><div class=row><div class=col-l><label>WiFi Mode</label></div><div class=col-r><input value=0 name=mode type=radio%s><label for=0>Access Point</label> <input value=1 name=mode type=radio%s><label for=1>Station</label></div></div><div class=row><div class=col-l><label>Baudrate</label></div><div class=col-r><input value=%u name=baud type=text></div></div><div class=row><div class=col-l><label>Host Port</label></div><div class=col-r><input value=%u name=hport  type=text></div></div><div class=row><div class=col-l><label>Client Port</label></div><div class=col-r><input value=%u name=cport  type=text></div></div></div>", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP ? " checked" : "", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_STA ? " checked" : "", getWorld()->getParameters()->getUartBaudRate(), getWorld()->getParameters()->getWifiUdpHport(), getWorld()->getParameters()->getWifiUdpCport());
     webServer.sendContent(buffer);
 
     snprintf(buffer, sizeof(buffer), "<div class=formbox><div class=row><div class=col-l><label>AP SSID</label></div><div class=col-r><input value='%s' name=ssid  type=text></div></div><div class=row><div class=col-l><label>AP Password (min len 8)</label></div><div class=col-r><input value='%s' name=pwd  type=text></div></div><div class=row><div class=col-l><label>WiFi Channel</label></div><div class=col-r><input value=%u name=channel  type=text></div></div></div>", getWorld()->getParameters()->getWifiSsid(), getWorld()->getParameters()->getWifiPassword(), getWorld()->getParameters()->getWifiChannel());
@@ -340,8 +367,9 @@ static void handle_setup()
     IPAddress StaIP = getWorld()->getParameters()->getWifiStaIP();
     IPAddress StaGateway = getWorld()->getParameters()->getWifiStaGateway();
     IPAddress StaSubnet = getWorld()->getParameters()->getWifiStaSubnet();
+    IPAddress GcsIP = getWorld()->getParameters()->getWifiStaTarget();
 
-    snprintf(buffer, sizeof(buffer), "<div class=row><div class=col-l><label>Station IP</label></div><div class=col-r><input value='%s' name=ipsta  type=text></div></div><div class=row><div class=col-l><label>Station Gateway</label></div><div class=col-r><input value='%s' name=gatewaysta  type=text></div></div><div class=row><div class=col-l><label>Station Subnet</label></div><div class=col-r><input value='%s' name=subnetsta  type=text></div></div></div><div class=row><input value=Save type=submit></div></form></div></body></html>", StaIP.toString().c_str(), StaGateway.toString().c_str(), StaSubnet.toString().c_str());
+    snprintf(buffer, sizeof(buffer), "<div class=row><div class=col-l><label>Station IP</label></div><div class=col-r><input value='%s' name=ipsta  type=text></div></div><div class=row><div class=col-l><label>Station Gateway</label></div><div class=col-r><input value='%s' name=gatewaysta  type=text></div></div><div class=row><div class=col-l><label>Station Subnet</label></div><div class=col-r><input value='%s' name=subnetsta  type=text></div></div><div class=row><div class=col-l><label>GCS IP address</label></div><div class=col-r><input value='%s' name=gcs_ip type=text></div></div></div><div class=row><input value=Save type=submit></div></form></div></body></html>", StaIP.toString().c_str(), StaGateway.toString().c_str(), StaSubnet.toString().c_str(), GcsIP.toString().c_str());
     webServer.sendContent(buffer);
 
     webServer.sendContent("");
@@ -552,6 +580,17 @@ void handle_setParameters()
     {
         ok = true;
         getWorld()->getParameters()->setWifiMode(webServer.arg(kMODE).toInt());
+    }
+    // if (webServer.hasArg(kGCS_IP))
+    // {
+    //     ok = true;
+    //     getWorld()->getParameters()->setWifiStaTarget(webServer.arg(kGCS_IP).toInt());
+    // }
+    if (webServer.hasArg(kGCS_IP))
+    {
+        IPAddress ip;
+        ip.fromString(webServer.arg(kGCS_IP).c_str());
+        getWorld()->getParameters()->setWifiStaTarget(ip);
     }
     if (webServer.hasArg(kREBOOT))
     {
