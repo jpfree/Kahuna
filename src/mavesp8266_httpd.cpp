@@ -50,6 +50,7 @@ const char PROGMEM kBADARG[] = "BAD ARGS";
 const char PROGMEM kAPPJSON[] = "application/json";
 const char PROGMEM kACCESSCTL[] = "Access-Control-Allow-Origin";
 const char PROGMEM kUPLOADFORM[] = "<div class=p_content><div class='formbox'><p>Upload new firmware</p><form method='POST' action='/upload' enctype='multipart/form-data'><input type='file' accept='.bin' name='update'><br></div><input type='submit' value='Update'></form></div></body></html>";
+const char PROGMEM kUPLOADSUCCESS[] = "<div class=p_content><div class='formbox'><p>Firmware Update in progress, waiting for the Kahuna to come back online...</p></div><script>function checkServer(){fetch('/').then(response=>{if(response.ok){window.location.href='/';}else{throw new Error('Server not ready');}}).catch(()=>{setTimeout(checkServer,5000);});}setTimeout(checkServer,10000);</script><div/></body></html>";
 
 const char PROGMEM kHEADER2[] = "<a href=javascript:void(0); class=icon onclick=changeTopnav()><div class=container><div class=bar1></div><div class=bar2></div><div class=bar3></div></div></a></div>";
 
@@ -141,12 +142,53 @@ void handle_upload()
 {
     webServer.sendHeader("Connection", "close");
     webServer.sendHeader(FPSTR(kACCESSCTL), "*");
-    webServer.send(200, FPSTR(kTEXTPLAIN), (Update.hasError()) ? "FAIL" : "OK");
+    webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+    webServer.send_P(200, kTEXTHTML, kHEADER1_C1);
+    webServer.sendContent_P(kHEADER1_C2);
+    webServer.sendContent_P(kHEADER1_C3);
+    webServer.sendContent_P(kHEADER1_C4);
+    webServer.sendContent_P(kHEADER1_C5);
+    webServer.sendContent_P(kHEADER1_C6);
+
+    snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/>Setup</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/update class=active>Firmware Update</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
+    webServer.sendContent(buffer);
+
+    webServer.sendContent_P(kHEADER2);
+    webServer.sendContent_P(kUPLOADSUCCESS);
+
+    // Serve an HTML page that polls the server
+    // String response = R"rawliteral(
+    // <div class=p_content><p>Firmware Update in progress, waiting for the Kahuna to come back online...</p></div><script>
+    //                 function checkServer() {
+    //                     fetch("/")
+    //                         .then(response => {
+    //                             if (response.ok) {
+    //                                 window.location.href = "/";
+    //                             } else {
+    //                                 throw new Error("Server not ready");
+    //                             }
+    //                         })
+    //                         .catch(() => {
+    //                             setTimeout(checkServer, 5000);
+    //                         });
+    //                 }
+    //                 setTimeout(checkServer, 10000);
+    //             </script></body></html>
+    //     )rawliteral";
+
+    //     webServer.send(200, "text/html", response);
+
+    webServer.sendContent("");
+
+    // webServer.send_P(200, kTEXTHTML, (Update.hasError()) ? "<p>FAIL</p>" : "<p>OK</p>");
+    // webServer.send(200, FPSTR(kTEXTPLAIN), (Update.hasError()) ? "FAIL" : "OK");
+
     if (updateCB)
     {
         updateCB->updateCompleted();
     }
-    ESP.restart();
+    delay(5000);   // ensure the response is sent before rebooting
+    ESP.restart(); // Restart the ESP device
 }
 
 //---------------------------------------------------------------------------------
@@ -581,11 +623,6 @@ void handle_setParameters()
         ok = true;
         getWorld()->getParameters()->setWifiMode(webServer.arg(kMODE).toInt());
     }
-    // if (webServer.hasArg(kGCS_IP))
-    // {
-    //     ok = true;
-    //     getWorld()->getParameters()->setWifiStaTarget(webServer.arg(kGCS_IP).toInt());
-    // }
     if (webServer.hasArg(kGCS_IP))
     {
         IPAddress ip;
