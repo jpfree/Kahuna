@@ -193,17 +193,9 @@ void setup_wifi()
 
     Parameters.setLocalIPAddress(localIP);
 
-    IPAddress gcs_ip;
-    if (Parameters.getWifiStaTarget() == 0)
-    {
-        // Broadcast
-        gcs_ip = localIP;
-        gcs_ip[3] = 255;
-    }
-    else
-    {
-        gcs_ip = Parameters.getWifiStaTarget();
-    }
+    IPAddress gcs_ip(localIP);
+    //-- I'm getting bogus IP from the DHCP server. Broadcasting for now.
+    gcs_ip[3] = 255;
 
     GCS.begin(&Vehicle, gcs_ip);
     //-- Initialize Update Server

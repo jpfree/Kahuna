@@ -95,7 +95,6 @@ struct stMavEspParameters mavParameters[] = {
     {"WIFI_IPSTA", &_wifi_ipsta, MavESP8266Parameters::ID_IPSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"WIFI_GATEWAYSTA", &_wifi_gatewaysta, MavESP8266Parameters::ID_GATEWAYSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"WIFI_SUBNET_STA", &_wifi_subnetsta, MavESP8266Parameters::ID_SUBNETSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
-    {"WIFI_TARGET_STA", &_wifi_targetsta, MavESP8266Parameters::ID_TARGETSTA, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
     {"UART_BAUDRATE", &_uart_baud_rate, MavESP8266Parameters::ID_UART, sizeof(uint32_t), MAV_PARAM_TYPE_UINT32, false},
 };
 
@@ -152,7 +151,6 @@ uint32_t MavESP8266Parameters::getWifiStaIP() { return _wifi_ipsta; }
 uint32_t MavESP8266Parameters::getWifiStaGateway() { return _wifi_gatewaysta; }
 uint32_t MavESP8266Parameters::getWifiStaSubnet() { return _wifi_subnetsta; }
 uint32_t MavESP8266Parameters::getUartBaudRate() { return _uart_baud_rate; }
-uint32_t MavESP8266Parameters::getWifiStaTarget() { return _wifi_targetsta; }
 
 //---------------------------------------------------------------------------------
 //-- Reset all to defaults
@@ -168,7 +166,6 @@ void MavESP8266Parameters::resetToDefaults()
     _wifi_ipsta = 0;
     _wifi_gatewaysta = 0;
     _wifi_subnetsta = 0;
-    _wifi_targetsta = 0;
     strncpy(_wifi_ssid, kDEFAULT_SSID, sizeof(_wifi_ssid));
     strncpy(_wifi_password, kDEFAULT_PASSWORD, sizeof(_wifi_password));
     strncpy(_wifi_ssidsta, kDEFAULT_SSID, sizeof(_wifi_ssidsta));
@@ -405,9 +402,4 @@ void MavESP8266Parameters::setWifiStaSubnet(uint32_t addr)
 void MavESP8266Parameters::setUartBaudRate(uint32_t baud)
 {
     _uart_baud_rate = baud;
-}
-
-void MavESP8266Parameters::setWifiStaTarget(uint32_t addr)
-{
-    _wifi_targetsta = addr;
 }

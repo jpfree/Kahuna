@@ -78,7 +78,6 @@ const char *kDEBUG = "debug";
 const char *kREBOOT = "reboot";
 const char *kPOSITION = "position";
 const char *kMODE = "mode";
-const char *kGCS_IP = "gcs_ip";
 
 const char *kFlashMaps[7] = {
     "512KB (256/256)",
@@ -329,12 +328,6 @@ void handle_getParameters() // This can be improved a lot
             snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%d.%d.%d.%d</td></tr>", getWorld()->getParameters()->getAt(i)->id, (int)(wifi_sta_subnet & 0xFF), (int)(wifi_sta_subnet >> 8 & 0xFF), (int)(wifi_sta_subnet >> 16 & 0xFF), (int)(wifi_sta_subnet >> 24 & 0xFF));
             webServer.sendContent(buffer);
         }
-        else if (i == getWorld()->getParameters()->ID_TARGETSTA)
-        {
-            uint32_t gcs_target_ip = getWorld()->getParameters()->getWifiStaTarget();
-            snprintf(buffer, sizeof(buffer), "<tr><td>%s</td><td>%d.%d.%d.%d</td></tr>", getWorld()->getParameters()->getAt(i)->id, (int)(gcs_target_ip & 0xFF), (int)(gcs_target_ip >> 8 & 0xFF), (int)(gcs_target_ip >> 16 & 0xFF), (int)(gcs_target_ip >> 24 & 0xFF));
-            webServer.sendContent(buffer);
-        }
         else // integer values
         {
             unsigned long val = 0;
@@ -385,9 +378,8 @@ static void handle_setup()
     IPAddress StaIP = getWorld()->getParameters()->getWifiStaIP();
     IPAddress StaGateway = getWorld()->getParameters()->getWifiStaGateway();
     IPAddress StaSubnet = getWorld()->getParameters()->getWifiStaSubnet();
-    IPAddress GcsIP = getWorld()->getParameters()->getWifiStaTarget();
 
-    snprintf(buffer, sizeof(buffer), "<div class=row><div class=col-l><label>Station IP</label></div><div class=col-r><input value='%s' name=ipsta  type=text></div></div><div class=row><div class=col-l><label>Station Gateway</label></div><div class=col-r><input value='%s' name=gatewaysta  type=text></div></div><div class=row><div class=col-l><label>Station Subnet</label></div><div class=col-r><input value='%s' name=subnetsta  type=text></div></div><div class=row><div class=col-l><label>GCS IP address</label></div><div class=col-r><input value='%s' name=gcs_ip type=text></div></div></div><div class=row><input value=Save type=submit></form>", StaIP.toString().c_str(), StaGateway.toString().c_str(), StaSubnet.toString().c_str(), GcsIP.toString().c_str());
+    snprintf(buffer, sizeof(buffer), "<div class=row><div class=col-l><label>Station IP</label></div><div class=col-r><input value='%s' name=ipsta  type=text></div></div><div class=row><div class=col-l><label>Station Gateway</label></div><div class=col-r><input value='%s' name=gatewaysta  type=text></div></div><div class=row><div class=col-l><label>Station Subnet</label></div><div class=col-r><input value='%s' name=subnetsta  type=text></div></div></div><div class=row><input value=Save type=submit></form>", StaIP.toString().c_str(), StaGateway.toString().c_str(), StaSubnet.toString().c_str());
     webServer.sendContent(buffer);
 
     webServer.sendContent_P(kDEFAULTBTN);
@@ -600,12 +592,6 @@ void handle_setParameters()
     {
         ok = true;
         getWorld()->getParameters()->setWifiMode(webServer.arg(kMODE).toInt());
-    }
-    if (webServer.hasArg(kGCS_IP))
-    {
-        IPAddress ip;
-        ip.fromString(webServer.arg(kGCS_IP).c_str());
-        getWorld()->getParameters()->setWifiStaTarget(ip);
     }
     if (webServer.hasArg(kREBOOT))
     {

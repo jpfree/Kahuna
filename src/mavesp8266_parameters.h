@@ -47,7 +47,6 @@
 #define DEFAULT_WIFI_CHANNEL 11
 #define DEFAULT_UDP_HPORT 14550
 #define DEFAULT_UDP_CPORT 14555
-#define DEFAULT_TARGET_ADDRESS 255
 
 struct stMavEspParameters
 {
@@ -92,7 +91,6 @@ public:
         ID_IPSTA,
         ID_GATEWAYSTA,
         ID_SUBNETSTA,
-        ID_TARGETSTA,
         ID_UART,
         ID_COUNT
     };
@@ -118,7 +116,6 @@ public:
     uint32_t getWifiStaGateway();
     uint32_t getWifiStaSubnet();
     uint32_t getUartBaudRate();
-    uint32_t getWifiStaTarget();
 
     void setDebugEnabled(int8_t enabled);
     void setWifiMode(int8_t mode);
@@ -134,7 +131,6 @@ public:
     void setWifiStaSubnet(uint32_t addr);
     void setUartBaudRate(uint32_t baud);
     void setLocalIPAddress(uint32_t ipAddress);
-    void setWifiStaTarget(uint32_t address);
 
     stMavEspParameters *getAt(int index);
 
