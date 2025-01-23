@@ -193,17 +193,9 @@ void setup_wifi()
 
     Parameters.setLocalIPAddress(localIP);
 
-    IPAddress gcs_ip;
-    if (Parameters.getWifiStaTarget() == 0)
-    {
-        // Broadcast
-        gcs_ip = localIP;
-        gcs_ip[3] = 255;
-    }
-    else
-    {
-        gcs_ip = Parameters.getWifiStaTarget();
-    }
+    IPAddress gcs_ip(localIP);
+    //-- I'm getting bogus IP from the DHCP server. Broadcasting for now.
+    gcs_ip[3] = 255;
 
     GCS.begin(&Vehicle, gcs_ip);
     //-- Initialize Update Server
@@ -273,7 +265,7 @@ void setup()
     WiFi.disconnect(true);
 
     // Set LED state when reboot
-    ledManager.setLED(ledManager.air, ledManager.off);
+    ledManager.setLED(ledManager.wifi, ledManager.off);
     ledManager.setLED(ledManager.air, ledManager.blink);
     ledManager.setLED(ledManager.gcs, ledManager.blink);
 
@@ -310,18 +302,21 @@ void loop()
     }
     else
     {
-        check_wifi_connected();
-        if (Component.inRawMode())
+        if (!updateStatus.isUpdating())
         {
-            GCS.readMessageRaw();
-            delay(0);
-            Vehicle.readMessageRaw();
-        }
-        else
-        {
-            GCS.readMessage();
-            delay(0);
-            Vehicle.readMessage();
+            check_wifi_connected();
+            if (Component.inRawMode())
+            {
+                GCS.readMessageRaw();
+                delay(0);
+                Vehicle.readMessageRaw();
+            }
+            else
+            {
+                GCS.readMessage();
+                delay(0);
+                Vehicle.readMessage();
+            }
         }
         updateServer.checkUpdates();
     }

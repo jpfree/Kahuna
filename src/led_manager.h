@@ -8,9 +8,9 @@ class LEDManager
 public:
     enum Led
     {
-        gcs = 12,
         wifi = 4,
-        air = 5
+        air = 12,
+        gcs = 5
     };
     enum LedStatus
     {
