@@ -211,8 +211,8 @@ bool MavESP8266Vehicle::_readMessage()
                     if (_message[_queue_count].msgid == MAVLINK_MSG_ID_HEARTBEAT)
                     {
                         _last_heartbeat = millis();
-                        _checkLinkErrors(&_message[_queue_count]);
                     }
+                    _checkLinkErrors(&_message[_queue_count]);
                 }
 
                 if (msgReceived == MAVLINK_FRAMING_BAD_CRC ||

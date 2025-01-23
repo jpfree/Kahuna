@@ -273,7 +273,7 @@ void setup()
     WiFi.disconnect(true);
 
     // Set LED state when reboot
-    ledManager.setLED(ledManager.air, ledManager.off);
+    ledManager.setLED(ledManager.wifi, ledManager.off);
     ledManager.setLED(ledManager.air, ledManager.blink);
     ledManager.setLED(ledManager.gcs, ledManager.blink);
 
@@ -310,18 +310,21 @@ void loop()
     }
     else
     {
-        check_wifi_connected();
-        if (Component.inRawMode())
+        if (!updateStatus.isUpdating())
         {
-            GCS.readMessageRaw();
-            delay(0);
-            Vehicle.readMessageRaw();
-        }
-        else
-        {
-            GCS.readMessage();
-            delay(0);
-            Vehicle.readMessage();
+            check_wifi_connected();
+            if (Component.inRawMode())
+            {
+                GCS.readMessageRaw();
+                delay(0);
+                Vehicle.readMessageRaw();
+            }
+            else
+            {
+                GCS.readMessage();
+                delay(0);
+                Vehicle.readMessage();
+            }
         }
         updateServer.checkUpdates();
     }
