@@ -36,14 +36,12 @@
  */
 
 #include <ESP8266WebServer.h>
-
 #include "mavesp8266.h"
 #include "mavesp8266_httpd.h"
 #include "mavesp8266_parameters.h"
 #include "mavesp8266_gcs.h"
 #include "mavesp8266_vehicle.h"
 
-char vstr[30];
 const char PROGMEM kTEXTPLAIN[] = "text/plain";
 const char PROGMEM kTEXTHTML[] = "text/html";
 const char PROGMEM kBADARG[] = "BAD ARGS";
@@ -56,11 +54,14 @@ const char PROGMEM kUPLOADSUCCESS[] = "<div class=p_content><div class='formbox'
 const char PROGMEM kHEADER2[] = "<a href=javascript:void(0); class=icon onclick=changeTopnav()><div class=container><div class=bar1></div><div class=bar2></div><div class=bar3></div></div></a></div>";
 
 const char PROGMEM kHEADER1_C1[] = "<!doctype html><meta content='text/html; charset=windows-1252'http-equiv=Content-Type><style>body { margin: 0; font-family: Arial, Helvetica, sans-serif; } .topnav { display: table; display: flex; overflow: hidden; background-color: #333; } .topnav a { float: left; color: #f2f2f2; text-align: center; padding: 14px 16px; text-decoration: none; font-size: 20px; order: 1; } .topnav a:hover { background-color: #ddd; color: black; } .topnav a.active { background-color: rgb(97, 32, 110); color: white; } .topnav .icon { display: none; } .formbox { margin-top: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background-color: #f2f2f2; } input[type='file'] { -webkit-text-size-adjust: 300%; } #logo { display: block; float: left; height: 40px; } #title { display: block; float: left; margin-top: auto; margin-bottom: auto; padding: 0; font-size: 30px; color: #61206e; }";
-const char PROGMEM kHEADER1_C2[] = " #logocontainer { display: flex; margin: 0; padding: 0; background-color: #f2f2f2; padding: 5px; } #FW { margin-top: auto; margin-bottom: 5px; margin-left: auto; margin-right: 5px; padding: 0; font-size: 10px; } input[type=text] { font-size: 1em; width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical; } label { padding: 12px 12px 12px 0; display: inline-block; } input[type=submit] { font-size: 1em; margin-top: 20px; background-color: #61206e; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; float: left; } button { background-color: gray; margin-left: 20px; font-size: 1em; margin-top: 20px; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; float: left; } .p_content { padding-left: 20px; padding-right: 20px; max-width: 650px; } .col-l { float: left; width: 35%; margin-top: 6px; } .col-r { float: left; width: 65%; margin-top: 6px; } .row:after { content: ''; display: table; clear: both; } table { table-layout: fixed; width: 100%; } ";
+const char PROGMEM kHEADER1_C2[] = " #logocontainer { display: flex; margin: 0; padding: 0; background-color: #f2f2f2; padding: 5px; } #FW { margin-top: auto; margin-bottom: 5px; margin-left: auto; margin-right: 5px; padding: 0; font-size: 10px; } input[type=text], select { font-size: 1em; width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; resize: vertical; background-color: white; } label { padding: 12px 12px 12px 0; display: inline-block; } input[type=submit] { font-size: 1em; margin-top: 20px; background-color: #61206e; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; float: left; } button { background-color: gray; margin-left: 20px; font-size: 1em; margin-top: 20px; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; float: left; } .p_content { padding-left: 20px; padding-right: 20px; max-width: 650px; } .col-l { float: left; width: 35%; margin-top: 6px; } .col-r { float: left; width: 65%; margin-top: 6px; } .row:after { content: ''; display: table; clear: both; } table { table-layout: fixed; width: 100%; } ";
 const char PROGMEM kHEADER1_C3[] = "@media screen and (max-device-width: 600px) { .topnav a:not(.active) { display: none; } .topnav a.active { order: 0; display: table-cell; width: 100%; text-align: left; } .topnav a.icon { display: block; margin-left: auto; margin-right: 0px; padding: none; } .topnav.responsive { position: relative; flex-direction: column; } .topnav.responsive .icon { display: table-cell; position: absolute; margin-left: 0px; right: 0; top: 0; padding-top: auto; padding-bottom: auto; } .topnav.responsive a { float: none; display: block; display: flex; text-align: left; } .topnav a { font-size: 200%; } body { font-size: 250%; } .bar1, .bar2, .bar3 { width: 60px; height: 10px; background-color: white; margin: 8px 0; } .container { display: inline-block; margin-top: auto; margin-bottom: auto; } .formbox { max-width: 100%; } input[type='radio'] { height: 35px; width: 35px; } #logo { height: 100px; } #title { font-size: 80px; } #FW { font-size: 25px; } .col-l, .col-r { width: 100%; margin-top: 0; } .p_content { max-width: 100%; } ";
 const char PROGMEM kHEADER1_C4[] = "input[type='submit'] { width: 100%; margin: 20px 0px 0px; } button { width: 100%; margin: 20px 0px 20px; } td { -webkit-text-size-adjust: none; } .left { width: 70%; } .right { width: 30%; } }</style><script>function changeTopnav(){var a=document.getElementById('BRtopnav');'topnav'===a.className?a.className+=' responsive':a.className='topnav'}</script><title>BR Kahuna</title><div id=logocontainer><svg id=logo version=1.1 viewBox='0 0 230 100'xmlns=http://www.w3.org/2000/svg><g transform='translate(3.62 20.395)'><g transform='translate(-.62316 -4.3941)'><g transform='matrix(1.848 0 0 1.848 -9.7077 -3.7351)'fill=none stroke=#61206e><path d='m12.448 35.432 18.022-17.616'stroke-width=2 /><g transform='matrix(.26458 0 0 .26458 3.6432 -4.4745)'stroke-width=7.5591><path d='m33.279 150.83v-113.39h37.795s20.651-1.4003 32.601 15.978c11.95 17.378-2.2818 30.829-2.2818 30.829l-68.114 66.579'/><path d='m71.074 37.442 43.626-0.08317s20.651-1.4003 32.601 15.978-2.2818 30.829-2.2818 30.829l-28.347 27.142'/>";
 const char PROGMEM kHEADER1_C5[] = "<path d='m33.279 150.83 122.28-0.08317-30.222-47.271'/></g><path d='m11.448 35.428 10.87 0.0039s10.549 0.22731 12.214-6.5893c1.6643-6.8166-5.7271-9.3846-5.7271-9.3846'stroke-width=2 stroke-miterlimit=3.1 /></g><text dominant-baseline=auto fill=#61206e font-family='&#39;Times New Roman&#39;'font-size=136.06px stop-color=#000000 style=font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;line-height:1.25;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal transform='matrix(.26458 0 0 .26458 48.793 14.503)'x=125.12414 xml:space=preserve y=57.077274><tspan font-family='&#39;Space Mono&#39;'font-size=136.06px x=125.12414 y=57.077274 fill=#61206e>Beyond</tspan></text>";
 const char PROGMEM kHEADER1_C6[] = "<text dominant-baseline=auto fill=#000000 font-family='&#39;Times New Roman&#39;'font-size=136.06px stop-color=#000000 style=font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;line-height:1.25;shape-margin:0;shape-padding:0;text-decoration-color:#000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal transform='matrix(.26458 0 0 .26458 -120.67 50.186)'x=761.78986 xml:space=preserve y=48.768002><tspan font-family='&#39;Space Mono&#39;'font-size=136.06px x=761.78986 y=48.768002>Robotix</tspan></text></g></g></svg><h1 id=title>Kahuna</h1><p id=FW>Version: ";
+
+const uint32_t PROGMEM baudRates[] = {9600, 19200, 38400, 57600, 111100, 115200, 230400, 256000, 460800, 500000, 921600};
+const uint8_t PROGMEM numBaudRates = 11;
 char buffer[1024];
 
 const char *kBAUD = "baud";
@@ -240,7 +241,7 @@ void handle_upload_status()
 void handle_getParameters() // This can be improved a lot
 {
     setNoCacheHeaders();
-    // Chunk 1
+
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
     webServer.send_P(200, kTEXTHTML, kHEADER1_C1);
     webServer.sendContent_P(kHEADER1_C2);
@@ -249,14 +250,11 @@ void handle_getParameters() // This can be improved a lot
     webServer.sendContent_P(kHEADER1_C5);
     webServer.sendContent_P(kHEADER1_C6);
 
-    // Chunk 2
     snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/>Setup</a><a href=/getstatus>Status</a><a href=/getparameters class=active>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
 
-    // Chunk 3
     webServer.sendContent_P(kHEADER2);
 
-    // Chunk 4
     webServer.sendContent("<div class=p_content><div class='formbox'><table><tr><td>Name</td><td>Value</td></tr>");
 
     for (int i = 0; i < MavESP8266Parameters::ID_COUNT; i++)
@@ -349,10 +347,9 @@ void handle_getParameters() // This can be improved a lot
 //---------------------------------------------------------------------------------
 static void handle_setup()
 {
-
     setNoCacheHeaders();
-    // Chunk 1
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
+
     webServer.send_P(200, kTEXTHTML, kHEADER1_C1);
     webServer.sendContent_P(kHEADER1_C2);
     webServer.sendContent_P(kHEADER1_C3);
@@ -360,30 +357,129 @@ static void handle_setup()
     webServer.sendContent_P(kHEADER1_C5);
     webServer.sendContent_P(kHEADER1_C6);
 
-    // Chunk 2
-    snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/ class=active>Setup</a><a href=/getstatus>Status</a><a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
+    snprintf(buffer, sizeof(buffer),
+             "%u.%u.%u</p></div><div class=topnav id=BRtopnav>"
+             "<a href=/ class=active>Setup</a><a href=/getstatus>Status</a>"
+             "<a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a>"
+             "<a href=/reboot>Reboot</a>",
+             MAVESP8266_VERSION_MAJOR,
+             MAVESP8266_VERSION_MINOR,
+             MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
-    // Chunk 3
+
     webServer.sendContent_P(kHEADER2);
 
-    snprintf(buffer, sizeof(buffer), "<div class=p_content><form action=/setparameters method=post><div class=formbox><div class=row><div class=col-l><label>WiFi Mode</label></div><div class=col-r><input value=0 name=mode type=radio%s><label for=0>Access Point</label> <input value=1 name=mode type=radio%s><label for=1>Station</label></div></div><div class=row><div class=col-l><label>Baudrate</label></div><div class=col-r><input value=%u name=baud type=text></div></div><div class=row><div class=col-l><label>Host Port</label></div><div class=col-r><input value=%u name=hport  type=text></div></div><div class=row><div class=col-l><label>Client Port</label></div><div class=col-r><input value=%u name=cport  type=text></div></div></div>", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP ? " checked" : "", getWorld()->getParameters()->getWifiMode() == WIFI_MODE_STA ? " checked" : "", getWorld()->getParameters()->getUartBaudRate(), getWorld()->getParameters()->getWifiUdpHport(), getWorld()->getParameters()->getWifiUdpCport());
+    snprintf(buffer, sizeof(buffer),
+             "<div class=p_content><form action=/setparameters method=post>"
+             "<div class=formbox>"
+             "<div class=row>"
+             "<div class=col-l><label>WiFi Mode</label></div>"
+             "<div class=col-r>"
+             "<input value=0 name=mode type=radio%s><label for=0>Access Point</label> "
+             "<input value=1 name=mode type=radio%s><label for=1>Station</label>"
+             "</div>"
+             "</div>"
+             "<div class=row>"
+             "<div class=col-l><label>Baud Rate</label></div>"
+             "<div class=col-r><select name='baud'>",
+             getWorld()->getParameters()->getWifiMode() == WIFI_MODE_AP ? " checked" : "",
+             getWorld()->getParameters()->getWifiMode() == WIFI_MODE_STA ? " checked" : "");
     webServer.sendContent(buffer);
 
-    snprintf(buffer, sizeof(buffer), "<div class=formbox><div class=row><div class=col-l><label>AP SSID</label></div><div class=col-r><input value='%s' name=ssid  type=text></div></div><div class=row><div class=col-l><label>AP Password (min len 8)</label></div><div class=col-r><input value='%s' name=pwd  type=text></div></div><div class=row><div class=col-l><label>WiFi Channel</label></div><div class=col-r><input value=%u name=channel  type=text></div></div></div>", getWorld()->getParameters()->getWifiSsid(), getWorld()->getParameters()->getWifiPassword(), getWorld()->getParameters()->getWifiChannel());
+    // Build the baud rate dropdown options into the buffer (we loop through so we can select the current baud rate)
+    size_t offset = 0;
+    uint32_t currentBaud = getWorld()->getParameters()->getUartBaudRate();
+    for (uint8_t i = 0; i < numBaudRates; i++)
+    {
+        uint32_t rate = pgm_read_dword(&baudRates[i]);
+        offset += snprintf(buffer + offset, sizeof(buffer) - offset,
+                           "<option value='%u'%s>%u</option>",
+                           rate,
+                           (rate == currentBaud) ? " selected" : "",
+                           rate);
+    }
     webServer.sendContent(buffer);
 
-    snprintf(buffer, sizeof(buffer), "<div class=formbox><div class=row><div class=col-l><label>Station SSID</label></div><div class=col-r><input value='%s' name=ssidsta  type=text></div></div><div class=row><div class=col-l><label>Station Password</label></div><div class=col-r><input value='%s' name=pwdsta  type=text></div></div>", getWorld()->getParameters()->getWifiStaSsid(), getWorld()->getParameters()->getWifiStaPassword());
+    snprintf(buffer, sizeof(buffer),
+             "</select></div></div>"
+             "<div class=row>"
+             "<div class=col-l><label>Host Port</label></div>"
+             "<div class=col-r><input value=%u name=hport  type=text></div>"
+             "</div>"
+             "<div class=row>"
+             "<div class=col-l><label>Client Port</label></div>"
+             "<div class=col-r><input value=%u name=cport  type=text></div>"
+             "</div>"
+             "</div>"
+             "<div class=formbox>"
+             "<div class=row>"
+             "<div class=col-l><label>AP SSID</label></div>"
+             "<div class=col-r><input value='%s' name=ssid type=text  maxlength='15' minlength='1' required></div>"
+             "</div>"
+             "<div class=row>"
+             "<div class=col-l><label>AP Password (min len 8)</label></div>"
+             "<div class=col-r><input value='%s' name=pwd type=text  maxlength='15' minlength='8' required></div>"
+             "</div>"
+             "<div class=row>"
+             "<div class=col-l><label>WiFi Channel</label></div>"
+             "<div class=col-r><select name='channel'>",
+             getWorld()->getParameters()->getWifiUdpHport(),
+             getWorld()->getParameters()->getWifiUdpCport(),
+             getWorld()->getParameters()->getWifiSsid(),
+             getWorld()->getParameters()->getWifiPassword());
+    webServer.sendContent(buffer);
+
+    // Build the WiFi channel dropdown options into the buffer (we loop through so we can select the current channel)
+    offset = 0;
+    uint8_t currentChannel = getWorld()->getParameters()->getWifiChannel();
+    for (uint8_t channel = 1; channel <= 11; channel++)
+    {
+        offset += snprintf(buffer + offset, sizeof(buffer) - offset,
+                           "<option value='%u'%s>%u</option>",
+                           channel,
+                           (channel == currentChannel) ? " selected" : "",
+                           channel);
+    }
+    webServer.sendContent(buffer);
+
+    snprintf(buffer, sizeof(buffer),
+             "</select></div></div></div>"
+             "<div class=formbox>"
+             "<div class=row>"
+             "<div class=col-l><label>Station SSID</label></div>"
+             "<div class=col-r><input value='%s' name=ssidsta type=text  maxlength='15'></div>"
+             "</div>"
+             "<div class=row>"
+             "<div class=col-l><label>Station Password</label></div>"
+             "<div class=col-r><input value='%s' name=pwdsta type=text  maxlength='15'></div>"
+             "</div>",
+             getWorld()->getParameters()->getWifiStaSsid(),
+             getWorld()->getParameters()->getWifiStaPassword());
     webServer.sendContent(buffer);
 
     IPAddress StaIP = getWorld()->getParameters()->getWifiStaIP();
     IPAddress StaGateway = getWorld()->getParameters()->getWifiStaGateway();
     IPAddress StaSubnet = getWorld()->getParameters()->getWifiStaSubnet();
-
-    snprintf(buffer, sizeof(buffer), "<div class=row><div class=col-l><label>Station IP</label></div><div class=col-r><input value='%s' name=ipsta  type=text></div></div><div class=row><div class=col-l><label>Station Gateway</label></div><div class=col-r><input value='%s' name=gatewaysta  type=text></div></div><div class=row><div class=col-l><label>Station Subnet</label></div><div class=col-r><input value='%s' name=subnetsta  type=text></div></div></div><div class=row><input value=Save type=submit></form>", StaIP.toString().c_str(), StaGateway.toString().c_str(), StaSubnet.toString().c_str());
+    snprintf(buffer, sizeof(buffer),
+             "<div class=row>"
+             "<div class=col-l><label>Station IP</label></div>"
+             "<div class=col-r><input value='%s' name=ipsta type=text></div>"
+             "</div>"
+             "<div class=row>"
+             "<div class=col-l><label>Station Gateway</label></div>"
+             "<div class=col-r><input value='%s' name=gatewaysta type=text></div>"
+             "</div>"
+             "<div class=row>"
+             "<div class=col-l><label>Station Subnet</label></div>"
+             "<div class=col-r><input value='%s' name=subnetsta type=text></div>"
+             "</div></div>"
+             "<div class=row><input value=Save type=submit></form>",
+             StaIP.toString().c_str(),
+             StaGateway.toString().c_str(),
+             StaSubnet.toString().c_str());
     webServer.sendContent(buffer);
 
     webServer.sendContent_P(kDEFAULTBTN);
-
     webServer.sendContent("");
 }
 
@@ -400,7 +496,7 @@ static void handle_getStatus()
     linkStatus *vehicleStatus = getWorld()->getVehicle()->getStatus();
 
     setNoCacheHeaders();
-    // Chunk 1
+
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);
     webServer.send_P(200, kTEXTHTML, kHEADER1_C1);
     webServer.sendContent_P(kHEADER1_C2);
@@ -409,13 +505,11 @@ static void handle_getStatus()
     webServer.sendContent_P(kHEADER1_C5);
     webServer.sendContent_P(kHEADER1_C6);
 
-    // Chunk 2
     snprintf(buffer, sizeof(buffer), "%u.%u.%u</p></div><div class=topnav id=BRtopnav><a href=/>Setup</a><a href=/getstatus class=active>Status</a><a href=/getparameters>Parameters</a><a href=/update>Firmware Update</a><a href=/reboot>Reboot</a>", MAVESP8266_VERSION_MAJOR, MAVESP8266_VERSION_MINOR, MAVESP8266_VERSION_BUILD);
     webServer.sendContent(buffer);
 
-    // Chunk 3
     webServer.sendContent_P(kHEADER2);
-    // Chunk 4
+
     snprintf(buffer, sizeof(buffer), "<div class=p_content><div class=formbox><p>Comm Status<table><tr><td class=left>Packets Received from GCS<td class=right>%u<tr><td>Packets Sent to GCS<td>%u<tr><td>GCS Packets Lost<td>%u<tr><td>Packets Received from Vehicle<td>%u<tr><td>Packets Sent to Vehicle<td>%u<tr><td>Vehicle Packets Lost<td>%u<tr><td>Radio Messages<td>%u</table><p>System Status<table><tr><td class=left>Flash Size<td class=right>%u<tr><td>Flash Available<td>%u<tr><td>RAM Left<td>%u<tr><td>Parameters CRC<td>'%s'</table></div></div></body></html>", gcsStatus->packets_received, gcsStatus->packets_sent, gcsStatus->packets_lost, vehicleStatus->packets_received, vehicleStatus->packets_sent, vehicleStatus->packets_lost, gcsStatus->radio_status_sent, ESP.getFlashChipRealSize(), flash, ESP.getFreeHeap(), paramCRC);
 
     webServer.sendContent(buffer);
