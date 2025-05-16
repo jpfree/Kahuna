@@ -1,5 +1,20 @@
 # Beyond Robotix Kahuna Firmware
 
+This is the repository for the Kahuna Mavlink Wifi Module for Ardupilot, PX4 and iNAV.
+- The docs can be found here: [Docs](https://beyond-robotix.gitbook.io/docs/kahuna)
+- The store page here: [Store](https://www.beyondrobotix.com/products/kahuna)
+
+Specifications:
+- Mass: 4g
+- Dimensions: 30x18x6mm
+- Max Output Power: 20dBm (~112 mW)
+- Range: up to 2.5km
+- Input Voltage: 5V
+- Continuous Current: 20mA
+- Peak Current: 250mA
+- Connector: JST-GH 6 Pin (compatible with Pixhawk and Cube Telem port)
+
+
 ## Current Binary
 
 The latest release is available in the releases section on the right-hand side. Download the .bin file and upload it to your kahuna via the web UI to update.
