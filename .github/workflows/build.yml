@@ -3,10 +3,10 @@ name: Build and Upload ESP8266 Firmware
 on:
   push:
     branches:
-      - main
+      - '**'  # 匹配所有分支
   pull_request:
     branches:
-      - main
+      - '**'  # 匹配所有分支的拉取请求
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
         run: |
           platformio run -e esp12e
 
-      # 上传固件文件作为产物.
+      # 上传固件文件作为产物
       - name: Upload Firmware Artifacts
         uses: actions/upload-artifact@v4
         with:
