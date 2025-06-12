@@ -34,12 +34,12 @@ jobs:
       # 运行PlatformIO编译ESP8266目标
       - name: Build ESP8266 Firmware
         run: |
-          platformio run -e esp12e
+          platformio run -e esp07s
 
       # 上传固件文件作为产物
       - name: Upload Firmware Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: esp8266-firmware
-          path: .pio/build/esp12e/*.bin
+          path: .pio/build/esp07s/*.bin
           retention-days: 7
