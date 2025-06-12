@@ -31,15 +31,23 @@ jobs:
           pip install --user platformio
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      # 运行PlatformIO编译ESP8266目标
-      - name: Build ESP8266 Firmware
+      # 获取所有PlatformIO环境
+      - name: Get PlatformIO Environments
+        id: get_envs
         run: |
-          platformio run -e esp07s
+          envs=$(platformio project config --get env | grep -o '\[env:.*\]' | sed 's/\[env://;s/\]//')
+          echo "environments=$envs" >> $GITHUB_OUTPUT
 
-      # 上传固件文件作为产物
+      # 运行PlatformIO编译所有目标
+      - name: Build All Firmware
+        run: |
+          platformio run
+
+      # 上传所有环境的固件文件作为产物
       - name: Upload Firmware Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: esp8266-firmware
-          path: .pio/build/esp07s/*.bin
+          path: |
+            .pio/build/*/*.bin
           retention-days: 7
