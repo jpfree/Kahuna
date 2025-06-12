@@ -1,0 +1,45 @@
+name: Build and Upload ESP8266 Firmware
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检查代码库
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive  # 克隆子模块（如MavLink）
+
+      # 设置Python环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # 安装PlatformIO
+      - name: Install PlatformIO
+        run: |
+          pip install --user platformio
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      # 运行PlatformIO编译ESP8266目标
+      - name: Build ESP8266 Firmware
+        run: |
+          platformio run -e esp12e
+
+      # 上传固件文件作为产物
+      - name: Upload Firmware Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: esp8266-firmware
+          path: .pio/build/esp12e/*.bin
+          retention-days: 7
